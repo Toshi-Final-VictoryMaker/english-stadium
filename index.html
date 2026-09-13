@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B1B24">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="英語スタジアム">
+<meta name="description" content="サッカー好きの小学生向け 英単語トレーニング">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B1B24'/%3E%3Ccircle cx='32' cy='32' r='19' fill='%23FFF7E8'/%3E%3Cpath d='M32 21l9 6.6-3.5 10.9h-11L23 27.6z' fill='%230B1B24'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230B1B24'/%3E%3Ccircle cx='32' cy='32' r='19' fill='%23FFF7E8'/%3E%3Cpath d='M32 21l9 6.6-3.5 10.9h-11L23 27.6z' fill='%230B1B24'/%3E%3C/svg%3E">
+<title>サッカー英語スタジアム</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap">
+<style>
+:root{
+  --night:#0B1B24;
+  --deep:#102A35;
+  --card:#16333F;
+  --card-hi:#1D4150;
+  --line:#27505F;
+  --pitch-a:#1E8A4E;
+  --pitch-b:#1A7B45;
+  --chalk:rgba(255,255,255,.60);
+  --flood:#FFF7E8;
+  --muted:#8FAEB9;
+  --accent:#FF6B2C;
+  --gold:#FFC53D;
+  --good:#35D07F;
+  --bad:#FF5C7A;
+  --r:18px;
+  --jp:'M PLUS Rounded 1c','Hiragino Maru Gothic ProN','Yu Gothic',sans-serif;
+  --en:'Archivo Black','M PLUS Rounded 1c','Arial Black',sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--night);color:var(--flood);
+  font-family:var(--jp);font-weight:700;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+}
+button{font-family:inherit;font-weight:800;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,.chip:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ---------- stadium shell ---------- */
+#sky{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(120% 60% at 20% -10%, rgba(255,214,140,.18), transparent 60%),
+  radial-gradient(120% 60% at 80% -10%, rgba(140,220,255,.14), transparent 60%),
+  linear-gradient(180deg,#081620 0%,#0B1B24 45%,#0E2530 100%);}
+#stands{position:fixed;top:0;left:0;right:0;height:210px;z-index:0;opacity:.5;
+  background-image:radial-gradient(circle, rgba(255,247,232,.30) 1.1px, transparent 1.4px);
+  background-size:11px 11px;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent);
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent);}
+#lights{position:fixed;top:-120px;left:50%;transform:translateX(-50%);width:150vw;height:520px;z-index:0;
+  background:conic-gradient(from 200deg at 50% 0%, transparent 0deg, rgba(255,241,209,.13) 14deg, transparent 30deg, transparent 150deg, rgba(255,241,209,.11) 166deg, transparent 182deg);
+  animation:sweep 14s ease-in-out infinite alternate;pointer-events:none}
+@keyframes sweep{from{opacity:.55;transform:translateX(-50%) rotate(-3deg)}to{opacity:1;transform:translateX(-50%) rotate(3deg)}}
+
+#app{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:0 16px 28px;min-height:100vh}
+
+/* ---------- scoreboard header ---------- */
+.board{margin-top:14px;background:linear-gradient(180deg,#0d2029,#132f3a);
+  border:2px solid var(--line);border-radius:16px;padding:10px 12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px}
+.rank{display:flex;align-items:center;gap:8px}
+.rank .badge{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:22px;
+  background:radial-gradient(circle at 30% 25%,#2a5a6c,#15323e);border:1px solid var(--line)}
+.rank .t{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.rank .n{font-size:14px;line-height:1.2}
+.lvwrap{min-width:0}
+.lvtop{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);letter-spacing:.06em}
+.lvbar{height:9px;border-radius:99px;background:#0a1b23;border:1px solid var(--line);overflow:hidden;margin-top:4px}
+.lvfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--accent));border-radius:99px;transition:width .6s cubic-bezier(.2,.9,.3,1)}
+.flame{font-family:var(--en);font-size:20px;color:var(--gold);display:flex;align-items:center;gap:3px;font-variant-numeric:tabular-nums}
+.flame small{font-family:var(--jp);font-size:10px;color:var(--muted);display:block;text-align:center;letter-spacing:.1em}
+
+/* ---------- generic ---------- */
+h2.sec{font-size:12px;letter-spacing:.18em;color:var(--muted);margin:22px 0 8px;font-weight:800}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.row{display:flex;gap:10px}
+.hidden{display:none!important}
+
+/* ---------- mission (the hero) ---------- */
+.mission{margin-top:16px;border-radius:22px;padding:18px 16px 16px;position:relative;overflow:hidden;
+  background:repeating-linear-gradient(100deg,var(--pitch-a) 0 34px,var(--pitch-b) 34px 68px);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 0 60px rgba(0,0,0,.22)}
+.mission::after{content:"";position:absolute;inset:8px;border:2px solid var(--chalk);border-radius:14px;pointer-events:none}
+.mission .eyebrow{font-size:11px;letter-spacing:.22em;color:rgba(255,255,255,.8)}
+.mission h1{font-family:var(--en);font-size:27px;margin:4px 0 2px;letter-spacing:.01em;text-wrap:balance;
+  text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.mission p{margin:0;font-size:13px;color:rgba(255,255,255,.88)}
+.kick{margin-top:14px;width:100%;padding:16px;border-radius:14px;font-size:20px;
+  background:linear-gradient(180deg,#FF884F,#F4551A);color:#2B0D02;
+  box-shadow:0 6px 0 #B93A0E, 0 14px 24px rgba(0,0,0,.4);transition:transform .08s, box-shadow .08s}
+.kick:active{transform:translateY(4px);box-shadow:0 2px 0 #B93A0E, 0 8px 16px rgba(0,0,0,.4)}
+.done{margin-top:12px;display:flex;align-items:center;gap:8px;font-size:13px;color:#fff;
+  background:rgba(0,0,0,.28);padding:8px 12px;border-radius:12px}
+
+/* ---------- week dots ---------- */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.day{text-align:center;font-size:10px;color:var(--muted)}
+.day i{display:block;height:30px;border-radius:9px;border:1px solid var(--line);background:#0d2029;
+  margin-bottom:4px;display:grid;place-items:center;font-style:normal;font-size:15px}
+.day.on i{background:linear-gradient(180deg,#2a6b48,#1d5238);border-color:#3d8e63}
+.day.today i{border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,197,61,.25)}
+
+/* ---------- menu tiles ---------- */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px;text-align:left;
+  display:flex;gap:10px;align-items:center;transition:background .15s}
+.tile:active{background:var(--card-hi)}
+.tile .ic{font-size:22px;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#0e2731;flex:none}
+.tile b{display:block;font-size:14px}
+.tile span{font-size:11px;color:var(--muted)}
+.tile.alert .ic{background:rgba(255,107,44,.16)}
+.linkrow{margin-top:12px;text-align:center}
+.linkrow button{font-size:12px;color:var(--muted);padding:8px 12px;letter-spacing:.06em}
+
+/* ---------- quiz ---------- */
+.qtop{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px}
+.period{font-size:11px;letter-spacing:.18em;color:var(--gold);background:rgba(255,197,61,.12);
+  border:1px solid rgba(255,197,61,.35);padding:5px 10px;border-radius:99px}
+.qcount{font-family:var(--en);font-size:15px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.combo{font-family:var(--en);font-size:15px;color:var(--accent);opacity:0;transition:opacity .2s}
+.combo.on{opacity:1}
+.touchline{position:relative;height:26px;margin-top:10px;border-bottom:2px dashed rgba(255,255,255,.16)}
+.touchline .ball{position:absolute;top:0;font-size:19px;transition:left .5s cubic-bezier(.2,.9,.3,1)}
+.touchline .net{position:absolute;right:0;top:0;font-size:19px}
+
+.prompt{margin-top:14px;border-radius:20px;padding:24px 18px;text-align:center;position:relative;overflow:hidden;
+  background:repeating-linear-gradient(100deg,var(--pitch-a) 0 30px,var(--pitch-b) 30px 60px);
+  border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 0 50px rgba(0,0,0,.25)}
+.prompt .hint{font-size:11px;letter-spacing:.16em;color:rgba(255,255,255,.8)}
+.prompt .big{font-family:var(--en);font-size:36px;line-height:1.15;margin:8px 0 2px;word-break:break-word;
+  text-shadow:0 3px 0 rgba(0,0,0,.28)}
+.prompt .bigjp{font-family:var(--jp);font-size:24px;font-weight:800;line-height:1.35;margin:8px 0 2px}
+.prompt .emo{font-size:74px;line-height:1.1;margin:4px 0}
+.speaker{margin-top:10px;width:88px;height:88px;border-radius:50%;font-size:38px;
+  background:radial-gradient(circle at 32% 28%,#fff6e0,#f0c98a);color:#2b1a05;
+  box-shadow:0 6px 0 #a97c33,0 12px 24px rgba(0,0,0,.4)}
+.speaker:active{transform:translateY(3px);box-shadow:0 3px 0 #a97c33}
+.replay{margin-top:8px;font-size:12px;color:rgba(255,255,255,.85);padding:6px 12px;border-radius:99px;background:rgba(0,0,0,.25)}
+
+.choices{display:grid;gap:10px;margin-top:14px}
+.choices.two{grid-template-columns:1fr 1fr}
+.opt{background:var(--card);border:1px solid var(--line);border-bottom:4px solid #0d2029;border-radius:15px;
+  padding:16px 12px;font-size:17px;min-height:62px;display:grid;place-items:center;text-align:center;
+  transition:transform .08s,background .15s,border-color .15s;word-break:break-word}
+.opt .en{font-family:var(--en);font-size:19px}
+.opt:active{transform:translateY(2px);background:var(--card-hi)}
+.opt.right{background:rgba(53,208,127,.2);border-color:var(--good)}
+.opt.wrong{background:rgba(255,92,122,.18);border-color:var(--bad)}
+.opt.dim{opacity:.45}
+
+/* order mode */
+.slotbox{margin-top:14px;min-height:64px;border:2px dashed var(--line);border-radius:15px;padding:10px;
+  display:flex;flex-wrap:wrap;gap:8px;align-content:center;justify-content:center;background:rgba(0,0,0,.18)}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.chip{font-family:var(--en);font-size:17px;padding:11px 14px;border-radius:12px;background:var(--card);
+  border:1px solid var(--line);border-bottom:3px solid #0d2029}
+.chip.used{opacity:.25;pointer-events:none}
+.slotbox .chip{background:var(--card-hi)}
+
+/* feedback overlay */
+#fb{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:rgba(6,16,22,.82);
+  backdrop-filter:blur(3px);padding:24px;text-align:center}
+#fb .verdict{font-family:var(--en);font-size:52px;line-height:1;letter-spacing:.02em}
+#fb .verdict.g{color:var(--good);text-shadow:0 0 26px rgba(53,208,127,.5)}
+#fb .verdict.b{color:var(--bad)}
+#fb .ansen{font-family:var(--en);font-size:30px;margin-top:14px}
+#fb .ansjp{font-size:17px;color:var(--muted);margin-top:4px}
+#fb .emo{font-size:56px}
+#fb .plus{font-family:var(--en);color:var(--gold);font-size:20px;margin-top:10px}
+#fb .tap{font-size:11px;color:var(--muted);margin-top:18px;letter-spacing:.14em}
+.pop{animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+#conf{position:fixed;inset:0;z-index:31;pointer-events:none;overflow:hidden}
+.par{position:absolute;top:38%;width:9px;height:14px;border-radius:2px;animation:fall 1.25s ease-out forwards}
+@keyframes fall{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(540deg)}}
+
+/* halftime / result */
+.panel{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;text-align:center}
+.panel .kicker{font-size:11px;letter-spacing:.2em;color:var(--gold)}
+.panel h2{font-family:var(--en);font-size:30px;margin:6px 0 2px}
+.score{font-family:var(--en);font-size:62px;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums;margin:10px 0 2px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-radius:14px;overflow:hidden;margin-top:16px}
+.stats div{background:var(--card);padding:12px 8px}
+.stats span{display:block;font-size:10px;color:var(--muted);letter-spacing:.1em}
+.stats b{font-family:var(--en);font-size:22px;font-variant-numeric:tabular-nums}
+.mvp{margin-top:14px;background:linear-gradient(135deg,#23485a,#16333F);border:1px solid var(--gold);
+  border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;text-align:left}
+.mvp .e{font-size:32px}
+.mvp .t{font-size:10px;letter-spacing:.16em;color:var(--gold)}
+.mvp .w{font-family:var(--en);font-size:20px}
+.mvp .j{font-size:12px;color:var(--muted)}
+.newbadge{margin-top:12px;background:rgba(255,197,61,.12);border:1px solid rgba(255,197,61,.4);
+  border-radius:14px;padding:12px;font-size:13px}
+.btnrow{display:grid;gap:10px;margin-top:16px}
+.btn{padding:15px;border-radius:14px;font-size:17px;background:linear-gradient(180deg,#FF884F,#F4551A);color:#2B0D02;
+  box-shadow:0 5px 0 #B93A0E}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #B93A0E}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);box-shadow:none;font-size:14px}
+.btn.ghost:active{transform:none}
+
+/* book */
+.cats{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;margin-top:10px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;padding:9px 13px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-size:13px}
+.cat.on{background:var(--gold);color:#241800;border-color:var(--gold)}
+.wlist{display:grid;gap:8px}
+.wrow{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:10px;background:var(--card);
+  border:1px solid var(--line);border-radius:13px;padding:11px 12px;text-align:left;width:100%}
+.wrow .e{font-size:21px}
+.wrow .w{font-family:var(--en);font-size:16px;line-height:1.2}
+.wrow .j{font-size:11px;color:var(--muted)}
+.wrow .st{font-size:12px;letter-spacing:1px;color:var(--gold);white-space:nowrap}
+
+/* stats page */
+.bars{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;align-items:end;height:92px;margin-top:12px}
+.bars div{background:linear-gradient(180deg,var(--gold),#c98b16);border-radius:6px 6px 3px 3px;min-height:4px}
+.barlab{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:6px;font-size:10px;color:var(--muted);text-align:center}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.bg{aspect-ratio:1;border-radius:14px;background:#0e2731;border:1px solid var(--line);display:grid;place-items:center;
+  font-size:24px;opacity:.28;position:relative}
+.bg.got{opacity:1;background:linear-gradient(160deg,#2a5a6c,#14313d);border-color:var(--gold)}
+.bg small{position:absolute;bottom:4px;font-size:8px;color:var(--muted);letter-spacing:.02em}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.setrow:last-child{border-bottom:0}
+.setrow label{font-size:14px}
+.seg{display:flex;gap:6px}
+.seg button{padding:8px 12px;border-radius:10px;background:#0e2731;border:1px solid var(--line);font-size:13px}
+.seg button.on{background:var(--gold);color:#241800}
+input[type=range]{width:130px;accent-color:var(--accent)}
+.foot{margin-top:22px;text-align:center;font-size:11px;color:var(--muted);line-height:1.7}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+
+</head>
+<body>
+<div id="sky"></div><div id="stands"></div><div id="lights"></div>
+
+<div id="app">
+
+  <!-- ================= HOME ================= -->
+  <section id="s-home">
+    <div class="board">
+      <div class="rank">
+        <div class="badge" id="h-rankicon">🔰</div>
+        <div><div class="t">ポジション</div><div class="n" id="h-rankname">ルーキー</div></div>
+      </div>
+      <div class="lvwrap">
+        <div class="lvtop"><span id="h-lv">Lv.1</span><span id="h-xp">0 / 100</span></div>
+        <div class="lvbar"><div class="lvfill" id="h-lvfill" style="width:0%"></div></div>
+      </div>
+      <div class="flame"><span>🔥</span><span id="h-streak">0</span><small>れんぞく</small></div>
+    </div>
+
+    <div class="mission">
+      <div class="eyebrow">きょうのミッション</div>
+      <h1 id="h-title">KICK OFF</h1>
+      <p id="h-sub">1試合 12問・約10分。ゴールを決めて単語をチームに入れよう。</p>
+      <button class="kick" id="b-kick">⚽ キックオフ</button>
+      <div class="done hidden" id="h-done">✅ きょうのミッション達成！ れんしゅうは何回でもOK</div>
+    </div>
+
+    <div class="week" id="h-week"></div>
+
+    <div class="tiles">
+      <button class="tile alert" id="b-drill"><div class="ic">🎯</div><div><b>とっくん</b><span id="h-drilln">にがて 0語</span></div></button>
+      <button class="tile" id="b-book"><div class="ic">📖</div><div><b>単語ずかん</b><span id="h-bookn">0 / 0 語</span></div></button>
+      <button class="tile" id="b-stats"><div class="ic">🏆</div><div><b>きろく</b><span>スタッツとバッジ</span></div></button>
+      <button class="tile" id="b-set"><div class="ic">⚙️</div><div><b>せってい</b><span>音声・問題数</span></div></button>
+    </div>
+
+    <div class="foot">まいにち10分。つづけた日が、きみの実力になる。</div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section id="s-quiz" class="hidden">
+    <div class="qtop">
+      <span class="period" id="q-period">前半</span>
+      <span class="combo" id="q-combo">🔥 x0</span>
+      <span class="qcount" id="q-count">1/12</span>
+    </div>
+    <div class="touchline"><span class="ball" id="q-ball" style="left:0%">⚽</span><span class="net">🥅</span></div>
+
+    <div class="prompt" id="q-prompt"></div>
+    <div class="choices" id="q-choices"></div>
+    <div class="btnrow"><button class="btn ghost" id="b-quit">やめる</button></div>
+  </section>
+
+  <!-- ================= HALFTIME / RESULT ================= -->
+  <section id="s-panel" class="hidden"></section>
+
+  <!-- ================= BOOK ================= -->
+  <section id="s-book" class="hidden">
+    <h2 class="sec">単語ずかん</h2>
+    <div class="cats" id="bk-cats"></div>
+    <div class="wlist" id="bk-list"></div>
+    <div class="btnrow"><button class="btn ghost" data-home>ホームへもどる</button></div>
+  </section>
+
+  <!-- ================= STATS ================= -->
+  <section id="s-stats" class="hidden">
+    <h2 class="sec">スタッツ</h2>
+    <div class="card">
+      <div class="stats">
+        <div><span>れんしゅうした日</span><b id="st-days">0</b></div>
+        <div><span>つうさんゴール</span><b id="st-goals">0</b></div>
+        <div><span>マスターした語</span><b id="st-master">0</b></div>
+        <div><span>さいこうれんぞく</span><b id="st-combo">0</b></div>
+      </div>
+      <h2 class="sec" style="margin-top:18px">この7日間のゴール</h2>
+      <div class="bars" id="st-bars"></div>
+      <div class="barlab" id="st-barlab"></div>
+    </div>
+    <h2 class="sec">バッジ</h2>
+    <div class="bgrid" id="st-badges"></div>
+    <div class="btnrow"><button class="btn ghost" data-home>ホームへもどる</button></div>
+  </section>
+
+  <!-- ================= SETTINGS ================= -->
+  <section id="s-set" class="hidden">
+    <h2 class="sec">せってい</h2>
+    <div class="card">
+      <div class="setrow"><label>読み上げのはやさ</label><input type="range" id="se-rate" min="60" max="120" step="5"></div>
+      <div class="setrow"><label>1試合の問題数</label><div class="seg" id="se-qn"></div></div>
+      <div class="setrow"><label>こうかおん</label><div class="seg" id="se-sfx"></div></div>
+      <div class="setrow"><label>読み上げテスト</label><button class="seg" style="padding:8px 12px;border-radius:10px;background:#0e2731;border:1px solid var(--line);font-size:13px" id="se-test">🔊 Nice shot!</button></div>
+    </div>
+    <h2 class="sec">おうちのかたへ</h2>
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.8;font-weight:400">
+      このアプリは<b style="color:var(--flood)">間隔反復（まちがえた語ほど早く再出題）</b>で出題順を決めています。
+      学習データはこの端末のブラウザだけに保存され、外部には送信されません。<br>
+      ホーム画面に追加すると、アプリのように起動できます。
+    </div>
+    <div class="btnrow">
+      <button class="btn ghost" id="se-reset">データをすべて消す</button>
+      <button class="btn ghost" data-home>ホームへもどる</button>
+    </div>
+  </section>
+</div>
+
+<div id="fb" class="hidden"></div>
+<div id="conf"></div>
+
+<script>
+/* =========================================================
+   DATA  —  [english, japanese, emoji, category, level]
+   ========================================================= */
+const CATS = [
+  ["soccer","サッカー","⚽"],["color","いろ","🎨"],["number","かず","🔢"],["animal","どうぶつ","🐾"],
+  ["food","たべもの","🍔"],["school","がっこう","🏫"],["body","からだ","🖐️"],["family","かぞく","👨‍👩‍👧‍👦"],
+  ["day","ようび","📅"],["month","つき","🗓️"],["sport","スポーツ","🏅"],["verb","どうさ","🏃"],
+  ["feeling","きもち","😄"],["weather","てんき","☀️"],["place","ばしょ","🏙️"],["vehicle","のりもの","🚃"],
+  ["adj","ようす","✨"],["phrase","フレーズ","💬"],["idiom","じゅくご","🔑"]
+];
+const RAW = [
+/* soccer */
+["ball","ボール","⚽","soccer",1],["goal","ゴール","🥅","soccer",1],["kick","ける","🦵","soccer",1],
+["pass","パスする","👟","soccer",1],["shoot","シュートする","💥","soccer",1],["team","チーム","👥","soccer",1],
+["player","せんしゅ","🏃","soccer",1],["coach","コーチ","📋","soccer",2],["game","しあい","🆚","soccer",1],
+["win","かつ","🏆","soccer",1],["lose","まける","😢","soccer",2],["practice","れんしゅう","🔁","soccer",2],
+["field","グラウンド","🟩","soccer",2],["goalkeeper","キーパー","🧤","soccer",2],["captain","キャプテン","🎖️","soccer",2],
+["score","とくてん","🔢","soccer",2],["uniform","ユニフォーム","👕","soccer",2],["referee","しんぱん","🟨","soccer",3],
+["dribble","ドリブルする","🌀","soccer",2],["defense","しゅび","🛡️","soccer",3],["trophy","トロフィー","🏆","soccer",2],
+["fan","ファン","📣","soccer",2],["stadium","スタジアム","🏟️","soccer",2],["whistle","ホイッスル","📯","soccer",3],
+["shoes","くつ","👟","soccer",1],["cheer","おうえんする","📣","soccer",2],["half time","ハーフタイム","⏱️","soccer",3],
+["world cup","ワールドカップ","🌍","soccer",2],
+/* color */
+["red","あか","🟥","color",1],["blue","あお","🟦","color",1],["yellow","きいろ","🟨","color",1],
+["green","みどり","🟩","color",1],["black","くろ","⬛","color",1],["white","しろ","⬜","color",1],
+["pink","ピンク","🩷","color",1],["orange","オレンジいろ","🟧","color",1],["purple","むらさき","🟪","color",1],
+["brown","ちゃいろ","🟫","color",1],
+/* number */
+["one","1","1️⃣","number",1],["two","2","2️⃣","number",1],["three","3","3️⃣","number",1],
+["four","4","4️⃣","number",1],["five","5","5️⃣","number",1],["six","6","6️⃣","number",1],
+["seven","7","7️⃣","number",1],["eight","8","8️⃣","number",1],["nine","9","9️⃣","number",1],
+["ten","10","🔟","number",1],["eleven","11","","number",2],["twelve","12","","number",2],
+["twenty","20","","number",2],["thirty","30","","number",2],["fifty","50","","number",2],
+["hundred","100","💯","number",2],
+/* animal */
+["dog","いぬ","🐶","animal",1],["cat","ねこ","🐱","animal",1],["bird","とり","🐦","animal",1],
+["fish","さかな","🐟","animal",1],["rabbit","うさぎ","🐰","animal",1],["monkey","さる","🐵","animal",1],
+["elephant","ぞう","🐘","animal",1],["lion","ライオン","🦁","animal",1],["bear","くま","🐻","animal",1],
+["horse","うま","🐴","animal",1],["panda","パンダ","🐼","animal",1],["tiger","とら","🐯","animal",1],
+["pig","ぶた","🐷","animal",1],["cow","うし","🐮","animal",1],["mouse","ねずみ","🐭","animal",1],
+["frog","かえる","🐸","animal",1],["sheep","ひつじ","🐑","animal",2],["duck","あひる","🦆","animal",2],
+["dolphin","いるか","🐬","animal",2],["snake","へび","🐍","animal",2],
+/* food */
+["apple","りんご","🍎","food",1],["banana","バナナ","🍌","food",1],["strawberry","いちご","🍓","food",1],
+["grapes","ぶどう","🍇","food",1],["bread","パン","🍞","food",1],["rice","ごはん","🍚","food",1],
+["egg","たまご","🥚","food",1],["milk","ぎゅうにゅう","🥛","food",1],["water","みず","💧","food",1],
+["juice","ジュース","🧃","food",1],["cake","ケーキ","🍰","food",1],["ice cream","アイスクリーム","🍨","food",1],
+["pizza","ピザ","🍕","food",1],["hamburger","ハンバーガー","🍔","food",1],["curry","カレー","🍛","food",1],
+["noodles","めん","🍜","food",2],["tomato","トマト","🍅","food",1],["carrot","にんじん","🥕","food",1],
+["potato","じゃがいも","🥔","food",2],["onion","たまねぎ","🧅","food",2],["corn","とうもろこし","🌽","food",2],
+["chicken","とりにく","🍗","food",2],["meat","にく","🥩","food",2],["salad","サラダ","🥗","food",1],
+["soup","スープ","🍲","food",1],["tea","おちゃ","🍵","food",1],["candy","あめ","🍬","food",1],
+["chocolate","チョコレート","🍫","food",1],["watermelon","すいか","🍉","food",2],["breakfast","あさごはん","🌅","food",2],
+["lunch","ひるごはん","🍱","food",1],["dinner","ばんごはん","🌙","food",2],
+/* school */
+["school","がっこう","🏫","school",1],["teacher","せんせい","👩‍🏫","school",1],["student","せいと","🧑‍🎓","school",2],
+["pencil","えんぴつ","✏️","school",1],["eraser","けしゴム","🧽","school",1],["notebook","ノート","📓","school",1],
+["book","ほん","📖","school",1],["desk","つくえ","🪑","school",1],["chair","いす","💺","school",1],
+["bag","かばん","🎒","school",1],["ruler","ものさし","📏","school",2],["scissors","はさみ","✂️","school",2],
+["crayon","クレヨン","🖍️","school",1],["classroom","きょうしつ","🚪","school",2],["library","としょしつ","📚","school",2],
+["gym","たいいくかん","🤸","school",2],["music","おんがく","🎵","school",1],["math","さんすう","➕","school",2],
+["science","りか","🔬","school",2],["English","えいご","🔤","school",1],["homework","しゅくだい","📝","school",2],
+["computer","コンピューター","💻","school",2],["clock","とけい","🕐","school",1],["P.E.","たいいく","🤾","school",2],
+/* body */
+["head","あたま","🙆","body",1],["eye","め","👁️","body",1],["ear","みみ","👂","body",1],
+["nose","はな","👃","body",1],["mouth","くち","👄","body",1],["hand","て","✋","body",1],
+["foot","あし（足首から下）","🦶","body",1],["leg","あし（脚）","🦵","body",2],["arm","うで","💪","body",2],
+["hair","かみのけ","💇","body",2],["face","かお","😀","body",1],["tooth","は","🦷","body",2],
+["finger","ゆび","☝️","body",2],["knee","ひざ","🦵","body",3],["shoulder","かた","🤷","body",3],
+/* family */
+["father","おとうさん","👨","family",1],["mother","おかあさん","👩","family",1],["brother","きょうだい","👦","family",1],
+["sister","しまい","👧","family",1],["grandfather","おじいさん","👴","family",1],["grandmother","おばあさん","👵","family",1],
+["family","かぞく","👨‍👩‍👧‍👦","family",1],["friend","ともだち","🧑‍🤝‍🧑","family",1],["baby","あかちゃん","👶","family",1],
+/* day */
+["Sunday","にちようび","","day",1],["Monday","げつようび","","day",1],["Tuesday","かようび","","day",1],
+["Wednesday","すいようび","","day",1],["Thursday","もくようび","","day",1],["Friday","きんようび","","day",1],
+["Saturday","どようび","","day",1],["today","きょう","📅","day",1],["tomorrow","あした","➡️","day",2],
+["yesterday","きのう","⬅️","day",2],
+/* month */
+["January","1月","","month",2],["February","2月","","month",2],["March","3月","","month",2],
+["April","4月","","month",2],["May","5月","","month",2],["June","6月","","month",2],
+["July","7月","","month",2],["August","8月","","month",2],["September","9月","","month",2],
+["October","10月","","month",2],["November","11月","","month",2],["December","12月","","month",2],
+/* sport */
+["soccer","サッカー","⚽","sport",1],["baseball","やきゅう","⚾","sport",1],["basketball","バスケットボール","🏀","sport",1],
+["tennis","テニス","🎾","sport",1],["swimming","すいえい","🏊","sport",1],["running","ランニング","🏃","sport",1],
+["volleyball","バレーボール","🏐","sport",2],["table tennis","たっきゅう","🏓","sport",2],["rugby","ラグビー","🏉","sport",2],
+["judo","じゅうどう","🥋","sport",2],["skiing","スキー","⛷️","sport",2],["badminton","バドミントン","🏸","sport",2],
+/* verb */
+["go","いく","🚶","verb",1],["come","くる","🔙","verb",1],["eat","たべる","🍽️","verb",1],
+["drink","のむ","🥤","verb",1],["run","はしる","🏃","verb",1],["walk","あるく","🚶","verb",1],
+["jump","とぶ","🤸","verb",1],["swim","およぐ","🏊","verb",1],["sing","うたう","🎤","verb",1],
+["dance","おどる","💃","verb",1],["play","あそぶ・(スポーツを)する","🎮","verb",1],["study","べんきょうする","📚","verb",1],
+["read","よむ","📖","verb",1],["write","かく","✍️","verb",1],["sleep","ねる","😴","verb",1],
+["wash","あらう","🧼","verb",2],["help","たすける","🤝","verb",1],["look","みる","👀","verb",1],
+["listen","きく","👂","verb",1],["speak","はなす","🗣️","verb",2],["make","つくる","🔨","verb",1],
+["see","みえる・会う","👁️","verb",1],["like","すき","❤️","verb",1],["want","ほしい","🙋","verb",1],
+["have","もっている","🤲","verb",1],["open","あける","🚪","verb",1],["close","しめる","🔒","verb",1],
+["stand","たつ","🧍","verb",2],["sit","すわる","🪑","verb",2],["buy","かう","🛒","verb",2],
+["cook","りょうりする","👨‍🍳","verb",2],["clean","そうじする","🧹","verb",2],["ride","のる","🚲","verb",2],
+["start","はじめる","▶️","verb",2],["stop","とめる","⏹️","verb",2],["try","やってみる","💪","verb",2],
+/* feeling */
+["happy","うれしい","😄","feeling",1],["sad","かなしい","😢","feeling",1],["angry","おこっている","😠","feeling",1],
+["sleepy","ねむい","😪","feeling",1],["hungry","おなかがすいた","😋","feeling",1],["thirsty","のどがかわいた","🥤","feeling",2],
+["tired","つかれた","😮‍💨","feeling",1],["fine","げんき","😊","feeling",1],["great","さいこう","👍","feeling",1],
+["scared","こわい","😨","feeling",2],["excited","わくわくする","🤩","feeling",2],["nervous","きんちょうする","😰","feeling",3],
+/* weather */
+["sunny","はれ","☀️","weather",1],["rainy","あめ","🌧️","weather",1],["cloudy","くもり","☁️","weather",1],
+["snowy","ゆき","❄️","weather",1],["windy","かぜがつよい","🌬️","weather",2],["hot","あつい","🥵","weather",1],
+["cold","さむい","🥶","weather",1],["warm","あたたかい","🌤️","weather",2],["cool","すずしい","🍃","weather",2],
+/* place */
+["park","こうえん","🏞️","place",1],["station","えき","🚉","place",1],["hospital","びょういん","🏥","place",1],
+["zoo","どうぶつえん","🦓","place",1],["supermarket","スーパー","🛒","place",1],["restaurant","レストラン","🍽️","place",1],
+["post office","ゆうびんきょく","📮","place",2],["bookstore","ほんや","📚","place",2],["museum","はくぶつかん","🏛️","place",2],
+["home","いえ","🏠","place",1],["shop","みせ","🏪","place",1],["bus stop","バスてい","🚏","place",2],
+["temple","おてら","⛩️","place",2],["beach","うみべ","🏖️","place",1],["mountain","やま","⛰️","place",1],
+["river","かわ","🏞️","place",1],["town","まち","🏘️","place",2],["swimming pool","プール","🏊","place",1],
+/* vehicle */
+["bus","バス","🚌","vehicle",1],["train","でんしゃ","🚆","vehicle",1],["car","くるま","🚗","vehicle",1],
+["bike","じてんしゃ","🚲","vehicle",1],["plane","ひこうき","✈️","vehicle",1],["ship","ふね","🚢","vehicle",1],
+["taxi","タクシー","🚕","vehicle",2],
+/* adj */
+["big","おおきい","🐘","adj",1],["small","ちいさい","🐜","adj",1],["long","ながい","📏","adj",1],
+["short","みじかい","✂️","adj",1],["new","あたらしい","✨","adj",1],["old","ふるい","🕰️","adj",1],
+["fast","はやい","💨","adj",1],["slow","おそい","🐢","adj",1],["strong","つよい","💪","adj",1],
+["cute","かわいい","🥰","adj",1],["cool","かっこいい","😎","adj",1],["fun","たのしい","🎉","adj",1],
+["delicious","おいしい","😋","adj",1],["beautiful","うつくしい","🌸","adj",2],["easy","かんたん","👌","adj",2],
+["difficult","むずかしい","😖","adj",2],["good","よい","👍","adj",1],["nice","すてき","🌟","adj",1],
+["kind","やさしい","💗","adj",2],["famous","ゆうめいな","🌟","adj",3],
+/* phrase */
+["I like soccer.","わたしはサッカーがすきです。","⚽","phrase",1],
+["I don't like natto.","わたしはなっとうがすきではありません。","🙅","phrase",2],
+["Do you like sports?","スポーツはすきですか。","❓","phrase",2],
+["Yes, I do.","はい、すきです。","🙆","phrase",1],
+["No, I don't.","いいえ、すきではありません。","🙅","phrase",1],
+["I can play soccer.","わたしはサッカーができます。","⚽","phrase",1],
+["I can't swim.","わたしはおよげません。","🏊","phrase",2],
+["Can you run fast?","はやくはしれますか。","🏃","phrase",2],
+["How are you?","げんきですか。","😊","phrase",1],
+["I'm fine, thank you.","げんきです、ありがとう。","😄","phrase",1],
+["Nice to meet you.","はじめまして。","🤝","phrase",1],
+["What time is it?","いまなんじですか。","🕐","phrase",2],
+["It's seven o'clock.","7じです。","🕖","phrase",2],
+["What's this?","これはなんですか。","❓","phrase",1],
+["This is my ball.","これはわたしのボールです。","⚽","phrase",1],
+["My name is Ken.","わたしのなまえはケンです。","🙋","phrase",1],
+["I'm from Japan.","わたしはにほんしゅっしんです。","🇯🇵","phrase",2],
+["Where is the station?","えきはどこですか。","🚉","phrase",2],
+["Go straight.","まっすぐいってください。","⬆️","phrase",2],
+["Turn right.","みぎにまがってください。","➡️","phrase",2],
+["Turn left.","ひだりにまがってください。","⬅️","phrase",2],
+["How much is it?","いくらですか。","💰","phrase",2],
+["When is your birthday?","たんじょうびはいつですか。","🎂","phrase",2],
+["My birthday is May 5th.","たんじょうびは5月5日です。","🎂","phrase",3],
+["What subject do you like?","なんのきょうかがすきですか。","📚","phrase",2],
+["I like P.E.","たいいくがすきです。","🤾","phrase",2],
+["I get up at six.","わたしは6じにおきます。","⏰","phrase",2],
+["I go to school at eight.","わたしは8じにがっこうへいきます。","🏫","phrase",2],
+["Let's play soccer!","サッカーをしよう！","⚽","phrase",1],
+["Good job!","よくやった！","👏","phrase",1],
+["Nice shot!","ナイスシュート！","💥","phrase",1],
+["Don't give up!","あきらめるな！","🔥","phrase",2],
+["I want to be a soccer player.","サッカーせんしゅになりたいです。","⚽","phrase",2],
+["This is my treasure.","これはわたしのたからものです。","💎","phrase",2],
+["Here you are.","はい、どうぞ。","🤲","phrase",1],
+["You're welcome.","どういたしまして。","😊","phrase",1],
+["Excuse me.","すみません。","🙇","phrase",1],
+["I'm sorry.","ごめんなさい。","🙏","phrase",1],
+["See you.","またね。","👋","phrase",1],
+["Good morning.","おはよう。","🌅","phrase",1],
+["Good night.","おやすみ。","🌙","phrase",1],
+["What do you want?","なにがほしいですか。","🎁","phrase",2],
+["I want a new ball.","あたらしいボールがほしいです。","⚽","phrase",2],
+["He is good at soccer.","かれはサッカーがとくいです。","⚽","phrase",3],
+["She can run fast.","かのじょははやくはしれます。","🏃","phrase",3],
+["I practice every day.","わたしはまいにちれんしゅうします。","🔁","phrase",2],
+["Where do you play soccer?","どこでサッカーをしますか。","🏟️","phrase",3],
+["I play soccer after school.","ほうかごにサッカーをします。","🏫","phrase",2],
+/* idiom */
+["get up","おきる","⏰","idiom",1],["go to bed","ねる","🛏️","idiom",1],["look at","～をみる","👀","idiom",1],
+["listen to","～をきく","🎧","idiom",1],["be good at","～がとくいだ","💪","idiom",2],["want to","～したい","🙋","idiom",2],
+["a lot of","たくさんの","📚","idiom",2],["after school","ほうかご","🏫","idiom",1],["every day","まいにち","📅","idiom",1],
+["over there","あそこに","👉","idiom",2],["take care","きをつけてね","🤗","idiom",2],["of course","もちろん","👌","idiom",2],
+["come on","さあ、いこう","🔥","idiom",2],["go home","いえにかえる","🏠","idiom",1],["play with","～とあそぶ","🤾","idiom",1],
+["look for","～をさがす","🔍","idiom",2],["get on","～にのる","🚌","idiom",2],["stand up","たちあがる","🧍","idiom",1]
+];
+
+const ITEMS = RAW.map((r,i)=>({id:i,w:r[0],j:r[1],e:r[2],c:r[3],lv:r[4],
+  isP:(r[3]==="phrase"), chunks:r[0].split(" ")}));
+const BY_CAT={}; ITEMS.forEach(it=>{(BY_CAT[it.c]=BY_CAT[it.c]||[]).push(it)});
+
+const RANKS=[[1,"ルーキー","🔰"],[3,"レギュラー","⚽"],[6,"エース","🌟"],[10,"キャプテン","🎖️"],
+             [15,"日本代表","🇯🇵"],[22,"ワールドクラス","🌍"],[30,"レジェンド","👑"]];
+const BADGES=[
+  {k:"first",e:"⚽",n:"はつゴール"},{k:"combo10",e:"🔥",n:"10れんぞく"},
+  {k:"perfect",e:"💯",n:"パーフェクト"},{k:"s3",e:"3️⃣",n:"3日れんぞく"},
+  {k:"s7",e:"🗓️",n:"1しゅうかん"},{k:"s30",e:"🏅",n:"1かげつ"},
+  {k:"s100",e:"👑",n:"100日"},{k:"w50",e:"📗",n:"50語マスター"},
+  {k:"w100",e:"📘",n:"100語マスター"},{k:"w200",e:"📙",n:"200語マスター"},
+  {k:"g500",e:"🥅",n:"500ゴール"},{k:"lv10",e:"🎖️",n:"Lv.10"}
+];
+const INTERVALS=[0,1,2,4,8,16,32,60];
+
+/* ========================= STATE ========================= */
+const KEY="soccer-english-v1";
+const DEF={xp:0,streak:0,best:0,last:"",days:{},goals:0,shots:0,bestCombo:0,
+           srs:{},badges:{},set:{rate:85,sfx:1,qn:12}};
+let S=load();
+function load(){try{const r=localStorage.getItem(KEY);if(!r)return JSON.parse(JSON.stringify(DEF));
+  const o=JSON.parse(r);return Object.assign(JSON.parse(JSON.stringify(DEF)),o,{set:Object.assign({},DEF.set,o.set||{})});
+  }catch(e){return JSON.parse(JSON.stringify(DEF))}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function dayStr(off){const d=new Date();d.setDate(d.getDate()+off);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+
+/* ========================= AUDIO ========================= */
+let voices=[],ac=null,primed=false;
+function loadVoices(){try{voices=speechSynthesis.getVoices()||[]}catch(e){}}
+if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
+function pickVoice(){
+  const en=voices.filter(v=>/^en(-|_)?/i.test(v.lang));
+  return en.find(v=>/Samantha|Google US English|Microsoft (Aria|Jenny|Zira)/i.test(v.name))||en.find(v=>/en-US/i.test(v.lang))||en[0]||null;
+}
+function speak(t){
+  if(!("speechSynthesis" in window))return;
+  try{speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t.replace("P.E.","P E"));
+    u.lang="en-US";u.rate=S.set.rate/100;u.pitch=1.05;
+    const v=pickVoice(); if(v)u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function prime(){ if(primed)return; primed=true;
+  try{ac=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
+  if("speechSynthesis" in window){try{const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}catch(e){}}
+}
+document.addEventListener("pointerdown",prime,{once:true});
+function tone(f,t0,dur,type,vol){
+  if(!ac||!S.set.sfx)return;
+  const o=ac.createOscillator(),g=ac.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(f,ac.currentTime+t0);
+  g.gain.setValueAtTime(0,ac.currentTime+t0);
+  g.gain.linearRampToValueAtTime(vol||.16,ac.currentTime+t0+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+t0+dur);
+  o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+t0);o.stop(ac.currentTime+t0+dur+.02);
+}
+function sfx(k){
+  if(!ac||!S.set.sfx)return;
+  if(k==="good"){[523,659,784,1047].forEach((f,i)=>tone(f,i*.07,.22,"triangle",.14))}
+  else if(k==="bad"){tone(180,0,.22,"sawtooth",.10);tone(140,.10,.26,"sawtooth",.08)}
+  else if(k==="whistle"){tone(2100,0,.12,"square",.05);tone(2400,.1,.16,"square",.05)}
+  else if(k==="tap"){tone(700,0,.06,"sine",.07)}
+  else if(k==="level"){[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.09,.3,"triangle",.15))}
+}
+
+/* ========================= PROGRESSION ========================= */
+function need(lv){return 80+(lv-1)*40}
+function levelInfo(){let lv=1,rest=S.xp;while(rest>=need(lv)){rest-=need(lv);lv++}return{lv,rest,need:need(lv)}}
+function rankOf(lv){let r=RANKS[0];RANKS.forEach(x=>{if(lv>=x[0])r=x});return r}
+function box(it){const r=S.srs[it.w];return r?r.b:-1}
+function masteredCount(){return Object.values(S.srs).filter(r=>r.b>=4).length}
+function seenCount(){return Object.keys(S.srs).length}
+function weakItems(){return ITEMS.filter(it=>{const r=S.srs[it.w];return r&&r.b<=1&&r.wrong>0})}
+
+/* ========================= SCREENS ========================= */
+const $=s=>document.querySelector(s);
+const SCREENS=["s-home","s-quiz","s-panel","s-book","s-stats","s-set"];
+function show(id){SCREENS.forEach(s=>$("#"+s).classList.toggle("hidden",s!==id));window.scrollTo(0,0)}
+
+function renderHome(){
+  const li=levelInfo(),rk=rankOf(li.lv);
+  $("#h-rankicon").textContent=rk[2];$("#h-rankname").textContent=rk[1];
+  $("#h-lv").textContent="Lv."+li.lv;
+  $("#h-xp").textContent=li.rest+" / "+li.need;
+  $("#h-lvfill").style.width=Math.round(li.rest/li.need*100)+"%";
+  $("#h-streak").textContent=S.streak;
+  const doneToday=!!S.days[today()];
+  $("#h-done").classList.toggle("hidden",!doneToday);
+  $("#h-title").textContent=doneToday?"ONE MORE GAME":"KICK OFF";
+  $("#h-sub").textContent=doneToday
+    ? "今日はもう1試合できる。コンボをのばそう。"
+    : "1試合 "+S.set.qn+"問・約10分。ゴールを決めて単語をチームに入れよう。";
+  const names=["日","月","火","水","木","金","土"];
+  $("#h-week").innerHTML=[6,5,4,3,2,1,0].map(o=>{
+    const ds=dayStr(-o),d=new Date();d.setDate(d.getDate()-o);
+    return '<div class="day '+(S.days[ds]?"on":"")+(o===0?" today":"")+'"><i>'+(S.days[ds]?"⚽":"")+'</i>'+names[d.getDay()]+'</div>';
+  }).join("");
+  $("#h-drilln").textContent="にがて "+weakItems().length+"語";
+  $("#h-bookn").textContent=masteredCount()+" / "+ITEMS.length+" 語";
+}
+
+/* ========================= QUIZ ENGINE ========================= */
+let Q=null;
+function buildQueue(n,onlyWeak){
+  const t=today();
+  let pool;
+  if(onlyWeak){
+    pool=weakItems().slice();shuffle(pool);return pool.slice(0,Math.min(n,pool.length));
+  }
+  const due=ITEMS.filter(it=>{const r=S.srs[it.w];return r&&r.due<=t});
+  due.sort((a,b)=>(S.srs[a.w].b-S.srs[b.w].b)||(S.srs[a.w].due<S.srs[b.w].due?-1:1));
+  const fresh=ITEMS.filter(it=>!S.srs[it.w]).sort((a,b)=>a.lv-b.lv);
+  const q=[];
+  const newCap=Math.max(3,Math.round(n*0.4));
+  for(let i=0;i<due.length&&q.length<n-Math.min(newCap,fresh.length);i++)q.push(due[i]);
+  for(let i=0;i<fresh.length&&q.length<n;i++)q.push(fresh[i]);
+  if(q.length<n){const seen=ITEMS.filter(it=>S.srs[it.w]&&q.indexOf(it)<0);shuffle(seen);
+    for(let i=0;i<seen.length&&q.length<n;i++)q.push(seen[i]);}
+  shuffle(q);return q;
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
+
+function modeFor(it){
+  const b=box(it);
+  if(it.isP){
+    if(b>=1&&it.chunks.length>=3&&it.chunks.length<=6&&Math.random()<.55)return "order";
+    return Math.random()<.5?"listen":"en2ja";
+  }
+  const r=Math.random();
+  if(b<0)return r<.6?"en2ja":"listen";          /* first meeting: show the word */
+  if(it.e&&r<.22)return "emoji";
+  if(r<.5)return "listen";
+  if(r<.78)return "en2ja";
+  return "ja2en";
+}
+function distractors(it,k){
+  let pool=(BY_CAT[it.c]||[]).filter(x=>x.w!==it.w&&x.j!==it.j);
+  if(pool.length<k){const extra=ITEMS.filter(x=>x.w!==it.w&&x.isP===it.isP&&pool.indexOf(x)<0);pool=pool.concat(extra)}
+  if(pool.length<k)pool=pool.concat(ITEMS.filter(x=>x.w!==it.w&&pool.indexOf(x)<0));
+  const near=pool.filter(x=>Math.abs(x.lv-it.lv)<=1);
+  const use=near.length>=k?near:pool;
+  shuffle(use);return use.slice(0,k);
+}
+
+function startGame(weak){
+  const n=weak?Math.min(10,Math.max(4,weakItems().length)):S.set.qn;
+  const queue=buildQueue(n,weak);
+  if(!queue.length){renderHome();show("s-home");return}
+  Q={queue,i:0,combo:0,best:0,goals:0,shots:0,xp:0,wrong:[],newM:[],mvp:null,weak:!!weak,half:false,extra:false,total:queue.length};
+  sfx("whistle");show("s-quiz");nextQ();
+}
+function nextQ(){
+  if(Q.i>=Q.queue.length){
+    if(!Q.extra&&Q.wrong.length){
+      Q.extra=true;Q.queue=Q.queue.concat(Q.wrong.slice(0,4));Q.total=Q.queue.length;
+    } else {return endGame()}
+  }
+  if(!Q.weak&&!Q.extra&&!Q.half&&Q.i===Math.floor(Q.total/2)&&Q.total>=8){Q.half=true;return halftime()}
+  renderQ();
+}
+function renderQ(){
+  const it=Q.queue[Q.i],mode=Q.extra?(it.isP?"en2ja":(Math.random()<.5?"listen":"en2ja")):modeFor(it);
+  Q.cur={it,mode,answered:false};
+  const isExtra=Q.extra;
+  $("#q-period").textContent=Q.weak?"とっくん":isExtra?"ロスタイム":(Q.i<Q.total/2?"前半":"後半");
+  $("#q-count").textContent=(Q.i+1)+"/"+Q.total;
+  $("#q-ball").style.left=Math.min(88,Q.i/Q.total*88)+"%";
+  const cb=$("#q-combo");cb.textContent="🔥 x"+Q.combo;cb.classList.toggle("on",Q.combo>=2);
+
+  const P=$("#q-prompt"),C=$("#q-choices");C.className="choices";C.innerHTML="";
+  if(mode==="listen"){
+    P.innerHTML='<div class="hint">きいて えらぼう</div><button class="speaker" id="sp">🔊</button><div><button class="replay" id="rp">もういちど</button></div>';
+    $("#sp").onclick=()=>speak(it.w);$("#rp").onclick=()=>speak(it.w);
+    setTimeout(()=>speak(it.w),250);
+    choices(it,"j");
+  } else if(mode==="en2ja"){
+    P.innerHTML='<div class="hint">いみは どれ？</div><div class="big">'+esc(it.w)+'</div><div><button class="replay" id="rp">🔊 きく</button></div>';
+    $("#rp").onclick=()=>speak(it.w);
+    setTimeout(()=>speak(it.w),250);
+    choices(it,"j");
+  } else if(mode==="ja2en"){
+    P.innerHTML='<div class="hint">えいごで いうと？</div>'+(it.e?'<div class="emo">'+it.e+'</div>':'')+'<div class="bigjp">'+esc(it.j)+'</div>';
+    choices(it,"w");
+  } else if(mode==="emoji"){
+    P.innerHTML='<div class="hint">この えは？</div><div class="emo">'+it.e+'</div>';
+    choices(it,"w");
+  } else if(mode==="order"){
+    P.innerHTML='<div class="hint">ならべかえて 文を つくろう</div>'+(it.e?'<div class="emo" style="font-size:46px">'+it.e+'</div>':'')+'<div class="bigjp">'+esc(it.j)+'</div>';
+    renderOrder(it);
+  }
+}
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function choices(it,field){
+  const C=$("#q-choices");
+  const opts=shuffle(distractors(it,3).concat([it]));
+  const texts=opts.map(o=>field==="w"?o.w:o.j);
+  const maxLen=Math.max.apply(null,texts.map(t=>t.length));
+  C.className="choices"+(maxLen<=9?" two":"");
+  opts.forEach(o=>{
+    const b=document.createElement("button");b.className="opt";
+    b.innerHTML=field==="w"?'<span class="en">'+esc(o.w)+'</span>':esc(o.j);
+    b.onclick=()=>{ if(Q.cur.answered)return; Q.cur.answered=true;
+      const ok=o.w===it.w;
+      [].forEach.call(C.children,c=>{c.classList.add("dim")});
+      b.classList.remove("dim");b.classList.add(ok?"right":"wrong");
+      if(!ok){[].forEach.call(C.children,(c,idx)=>{if(opts[idx].w===it.w){c.classList.remove("dim");c.classList.add("right")}})}
+      judge(ok);
+    };
+    C.appendChild(b);
+  });
+}
+function renderOrder(it){
+  const C=$("#q-choices");C.className="choices";
+  C.innerHTML='<div class="slotbox" id="slot"></div><div class="bank" id="bank"></div>';
+  const slot=$("#slot"),bank=$("#bank");
+  const order=shuffle(it.chunks.map((c,i)=>({c,i})));
+  const placed=[];
+  order.forEach((o,idx)=>{
+    const b=document.createElement("button");b.className="chip";b.textContent=o.c;b.dataset.k=idx;
+    b.onclick=()=>{if(Q.cur.answered)return;sfx("tap");b.classList.add("used");placed.push({o,b});draw()};
+    bank.appendChild(b);
+  });
+  function draw(){
+    slot.innerHTML="";
+    placed.forEach((p,i)=>{
+      const s=document.createElement("button");s.className="chip";s.textContent=p.o.c;
+      s.onclick=()=>{if(Q.cur.answered)return;p.b.classList.remove("used");placed.splice(i,1);draw()};
+      slot.appendChild(s);
+    });
+    if(placed.length===it.chunks.length){
+      Q.cur.answered=true;
+      const ok=placed.map(p=>p.o.c).join(" ")===it.w;
+      setTimeout(()=>judge(ok,ok?15:0),250);
+    }
+  }
+  draw();
+}
+
+function judge(ok,xpOverride){
+  Q.shots++;S.shots++;
+  const it=Q.cur.it;
+  const r=S.srs[it.w]||(S.srs[it.w]={b:0,due:today(),seen:0,ok:0,wrong:0});
+  r.seen++;
+  if(ok){
+    Q.goals++;S.goals++;Q.combo++;if(Q.combo>Q.best)Q.best=Q.combo;
+    if(Q.combo>S.bestCombo)S.bestCombo=Q.combo;
+    r.ok++;const before=r.b;r.b=Math.min(7,r.b+1);
+    if(before<4&&r.b>=4)Q.newM.push(it);
+    r.due=dayStr(INTERVALS[r.b]);
+    const gain=(xpOverride!==undefined?xpOverride:10)+Math.min(Q.combo,6)*2;
+    Q.xp+=gain;S.xp+=gain;
+    if(!Q.mvp||Q.combo>=Q.best)Q.mvp=it;
+    sfx("good");feedback(true,it,gain);
+  } else {
+    Q.combo=0;r.wrong++;r.b=0;r.due=today();
+    if(Q.wrong.indexOf(it)<0&&!Q.extra)Q.wrong.push(it);
+    sfx("bad");feedback(false,it,0);
+  }
+  save();
+}
+
+let fbTimer=null;
+function feedback(ok,it,gain){
+  const F=$("#fb");F.classList.remove("hidden");
+  F.innerHTML='<div>'+
+    '<div class="verdict pop '+(ok?"g":"b")+'">'+(ok?"GOAL!":"OH NO...")+'</div>'+
+    (it.e?'<div class="emo pop">'+it.e+'</div>':'')+
+    '<div class="ansen">'+esc(it.w)+'</div>'+
+    '<div class="ansjp">'+esc(it.j)+'</div>'+
+    (ok?'<div class="plus">+'+gain+' XP'+(Q.combo>=3?"　🔥 x"+Q.combo:"")+'</div>'
+       :'<div class="plus" style="color:var(--muted)">つぎで とりかえそう</div>')+
+    '<div class="tap">タップで つづける</div></div>';
+  if(ok)confetti();
+  speak(it.w);
+  clearTimeout(fbTimer);
+  const adv=()=>{clearTimeout(fbTimer);F.classList.add("hidden");F.onclick=null;Q.i++;nextQ()};
+  F.onclick=adv;
+  fbTimer=setTimeout(adv,ok?1500:2600);
+}
+function confetti(){
+  const C=$("#conf"),cols=["#FFC53D","#FF6B2C","#35D07F","#FFF7E8","#6FD3FF"];
+  for(let i=0;i<22;i++){
+    const p=document.createElement("span");p.className="par";
+    p.style.left=(20+Math.random()*60)+"%";
+    p.style.background=cols[i%cols.length];
+    p.style.setProperty("--dx",(Math.random()*260-130)+"px");
+    p.style.setProperty("--dy",(140+Math.random()*220)+"px");
+    p.style.animationDelay=(Math.random()*.18)+"s";
+    C.appendChild(p);setTimeout(()=>p.remove(),1500);
+  }
+}
+
+function halftime(){
+  sfx("whistle");show("s-panel");
+  $("#s-panel").innerHTML='<div class="panel">'+
+    '<div class="kicker">HALF TIME</div><h2>ハーフタイム</h2>'+
+    '<div class="score">'+Q.goals+'</div><div style="font-size:12px;color:var(--muted)">ゴール / '+Q.shots+'シュート</div>'+
+    '<div class="stats"><div><span>さいこうれんぞく</span><b>'+Q.best+'</b></div><div><span>かくとくXP</span><b>'+Q.xp+'</b></div></div>'+
+    '<div class="btnrow"><button class="btn" id="p-go">後半キックオフ ⚽</button></div></div>';
+  $("#p-go").onclick=()=>{show("s-quiz");renderQ()};
+}
+
+function endGame(){
+  sfx("whistle");
+  const t=today(),first=!S.days[t];
+  if(first){
+    S.days[t]=1;
+    if(S.last===dayStr(-1))S.streak++;else if(S.last!==t)S.streak=1;
+    if(S.streak>S.best)S.best=S.streak;
+    S.last=t;
+  }
+  const gained=checkBadges();
+  save();
+  const rate=Q.shots?Math.round(Q.goals/Q.shots*100):0;
+  const li=levelInfo(),rk=rankOf(li.lv);
+  let html='<div class="panel">'+
+    '<div class="kicker">FULL TIME</div><h2>'+(rate===100?"PERFECT GAME":rate>=80?"BIG WIN":rate>=50?"GOOD GAME":"NICE TRY")+'</h2>'+
+    '<div class="score">'+Q.goals+'</div><div style="font-size:12px;color:var(--muted)">ゴール / '+Q.shots+'シュート</div>'+
+    '<div class="stats">'+
+      '<div><span>けっていりつ</span><b>'+rate+'%</b></div>'+
+      '<div><span>さいこうれんぞく</span><b>'+Q.best+'</b></div>'+
+      '<div><span>かくとく XP</span><b>'+Q.xp+'</b></div>'+
+      '<div><span>れんぞく日数</span><b>'+S.streak+'</b></div>'+
+    '</div>';
+  if(Q.mvp)html+='<div class="mvp"><div class="e">'+(Q.mvp.e||"⚽")+'</div><div><div class="t">MAN OF THE MATCH</div>'+
+    '<div class="w">'+esc(Q.mvp.w)+'</div><div class="j">'+esc(Q.mvp.j)+'</div></div></div>';
+  if(Q.newM.length)html+='<div class="newbadge">🆕 チームに加入： '+Q.newM.slice(0,4).map(x=>esc(x.w)).join(" / ")+(Q.newM.length>4?" ほか":"")+'</div>';
+  if(gained.length)html+='<div class="newbadge">🏅 バッジ獲得： '+gained.map(b=>b.e+" "+b.n).join("　")+'</div>';
+  html+='<div class="newbadge" style="background:rgba(255,255,255,.05);border-color:var(--line)">'+rk[2]+' '+rk[1]+'　Lv.'+li.lv+'　（つぎのレベルまで '+(li.need-li.rest)+' XP）</div>';
+  html+='<div class="btnrow"><button class="btn" id="p-again">もう1試合 ⚽</button>'+
+        '<button class="btn ghost" data-home>ホームへもどる</button></div></div>';
+  $("#s-panel").innerHTML=html;show("s-panel");
+  $("#p-again").onclick=()=>startGame(false);
+  bindHome();
+}
+function checkBadges(){
+  const got=[],li=levelInfo(),m=masteredCount();
+  const cond={first:S.goals>=1,combo10:S.bestCombo>=10,perfect:Q&&Q.shots>0&&Q.goals===Q.shots&&Q.shots>=8,
+    s3:S.streak>=3,s7:S.streak>=7,s30:S.streak>=30,s100:S.streak>=100,
+    w50:m>=50,w100:m>=100,w200:m>=200,g500:S.goals>=500,lv10:li.lv>=10};
+  BADGES.forEach(b=>{if(cond[b.k]&&!S.badges[b.k]){S.badges[b.k]=today();got.push(b)}});
+  if(got.length)sfx("level");
+  return got;
+}
+
+/* ========================= BOOK ========================= */
+let bkCat="soccer";
+function renderBook(){
+  $("#bk-cats").innerHTML=CATS.map(c=>'<button class="cat'+(c[0]===bkCat?" on":"")+'" data-c="'+c[0]+'">'+c[2]+" "+c[1]+'</button>').join("");
+  [].forEach.call($("#bk-cats").children,b=>b.onclick=()=>{bkCat=b.dataset.c;renderBook()});
+  const list=BY_CAT[bkCat]||[];
+  $("#bk-list").innerHTML=list.map(it=>{
+    const b=box(it),stars=b<0?"・・・":b>=6?"★★★":b>=4?"★★☆":b>=2?"★☆☆":"☆☆☆";
+    return '<button class="wrow" data-w="'+esc(it.w)+'"><span class="e">'+(it.e||"🔤")+'</span>'+
+      '<span><span class="w">'+esc(it.w)+'</span><span class="j">'+esc(it.j)+'</span></span>'+
+      '<span class="st">'+stars+'</span></button>';
+  }).join("");
+  [].forEach.call($("#bk-list").children,b=>b.onclick=()=>{sfx("tap");speak(b.dataset.w)});
+  show("s-book");bindHome();
+}
+
+/* ========================= STATS ========================= */
+function renderStats(){
+  $("#st-days").textContent=Object.keys(S.days).length;
+  $("#st-goals").textContent=S.goals;
+  $("#st-master").textContent=masteredCount();
+  $("#st-combo").textContent=S.bestCombo;
+  const names=["日","月","火","水","木","金","土"];
+  const vals=[6,5,4,3,2,1,0].map(o=>S.days[dayStr(-o)]?1:0);
+  const labs=[6,5,4,3,2,1,0].map(o=>{const d=new Date();d.setDate(d.getDate()-o);return names[d.getDay()]});
+  $("#st-bars").innerHTML=vals.map(v=>'<div style="height:'+(v?92:6)+'%"></div>').join("");
+  $("#st-barlab").innerHTML=labs.map(l=>'<span>'+l+'</span>').join("");
+  $("#st-badges").innerHTML=BADGES.map(b=>'<div class="bg'+(S.badges[b.k]?" got":"")+'">'+b.e+'<small>'+b.n+'</small></div>').join("");
+  show("s-stats");bindHome();
+}
+
+/* ========================= SETTINGS ========================= */
+function renderSet(){
+  $("#se-rate").value=S.set.rate;
+  $("#se-qn").innerHTML=[8,12,16].map(n=>'<button data-n="'+n+'" class="'+(S.set.qn===n?"on":"")+'">'+n+'問</button>').join("");
+  [].forEach.call($("#se-qn").children,b=>b.onclick=()=>{S.set.qn=+b.dataset.n;save();renderSet()});
+  $("#se-sfx").innerHTML=[[1,"ON"],[0,"OFF"]].map(x=>'<button data-v="'+x[0]+'" class="'+(S.set.sfx===x[0]?"on":"")+'">'+x[1]+'</button>').join("");
+  [].forEach.call($("#se-sfx").children,b=>b.onclick=()=>{S.set.sfx=+b.dataset.v;save();renderSet()});
+  show("s-set");bindHome();
+}
+$("#se-rate").oninput=e=>{S.set.rate=+e.target.value;save()};
+$("#se-rate").onchange=()=>speak("Nice shot!");
+$("#se-test").onclick=()=>speak("Nice shot! Don't give up!");
+$("#se-reset").onclick=()=>{
+  if(confirm("学習データ（れんぞく記録・おぼえた単語）をすべて消します。よろしいですか？")){
+    S=JSON.parse(JSON.stringify(DEF));save();renderHome();show("s-home");
+  }
+};
+
+/* ========================= WIRING ========================= */
+function bindHome(){[].forEach.call(document.querySelectorAll("[data-home]"),b=>b.onclick=()=>{renderHome();show("s-home")})}
+$("#b-kick").onclick=()=>startGame(false);
+$("#b-drill").onclick=()=>{ if(!weakItems().length){alert("いまは にがてな単語がありません。まず1試合やってみよう！");return} startGame(true)};
+$("#b-book").onclick=renderBook;
+$("#b-stats").onclick=renderStats;
+$("#b-set").onclick=renderSet;
+$("#b-quit").onclick=()=>{if(confirm("試合をやめる？ ここまでのXPは記録されています。")){renderHome();show("s-home")}};
+bindHome();
+renderHome();
+</script>
+</body>
+</html>
