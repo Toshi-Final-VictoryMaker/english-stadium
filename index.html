@@ -251,6 +251,60 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 .howto ol{margin:8px 0 0;padding-left:1.2em}
 .howto li{margin-bottom:5px}
 
+/* ---------- speaking ---------- */
+.tile.speak .ic{background:linear-gradient(160deg,#3a2a5e,#20304a)}
+.mic{margin:16px auto 0;width:118px;height:118px;border-radius:50%;font-size:48px;display:grid;place-items:center;
+  background:radial-gradient(circle at 32% 28%,#ff9a63,#e8491a);color:#2b0d02;
+  box-shadow:0 8px 0 #a5330d,0 16px 30px rgba(0,0,0,.45)}
+.mic:active{transform:translateY(4px);box-shadow:0 4px 0 #a5330d}
+.mic.rec{background:radial-gradient(circle at 32% 28%,#ff7b7b,#c62828);animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 8px 0 #7d1b1b,0 0 0 0 rgba(255,92,122,.55)}50%{box-shadow:0 8px 0 #7d1b1b,0 0 0 22px rgba(255,92,122,0)}}
+.mictip{text-align:center;font-size:13px;color:var(--muted);margin-top:12px;min-height:22px;font-weight:400}
+.heard{margin-top:12px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+  font-size:13px;text-align:center;font-weight:400;color:var(--muted)}
+.heard b{font-family:var(--en);color:var(--flood);font-size:15px}
+.stars{font-size:30px;letter-spacing:4px;text-align:center;margin-top:8px;color:var(--gold)}
+.sp-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+
+/* ---------- player cards ---------- */
+.cardgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcard{border-radius:16px;padding:12px;text-align:left;border:1px solid var(--line);background:var(--card);
+  display:flex;flex-direction:column;gap:4px;min-height:112px;position:relative;overflow:hidden}
+.pcard.got{background:linear-gradient(155deg,#27506a,#152f3c);border-color:var(--gold)}
+.pcard.locked{opacity:.45}
+.pcard .fl{font-size:24px}
+.pcard .nm{font-size:13px;line-height:1.3}
+.pcard .ps{font-size:10px;color:var(--muted);letter-spacing:.08em}
+.pcard .lk{font-size:10px;color:var(--muted);font-weight:400;line-height:1.4}
+.tierbar{position:absolute;top:0;left:0;right:0;height:3px}
+.t1{background:#6FD3FF}.t2{background:var(--good)}.t3{background:var(--accent)}.t4{background:var(--gold)}
+
+#reveal{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:20px;
+  background:radial-gradient(circle at 50% 35%,rgba(255,197,61,.18),rgba(6,16,22,.94) 60%);backdrop-filter:blur(4px)}
+.bigcard{width:100%;max-width:340px;border-radius:22px;padding:20px;text-align:center;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#2c5c78,#12303d);border:2px solid var(--gold);
+  box-shadow:0 24px 60px rgba(0,0,0,.6);animation:flip .7s cubic-bezier(.2,1.1,.3,1)}
+@keyframes flip{0%{transform:rotateY(90deg) scale(.8);opacity:0}100%{transform:rotateY(0) scale(1);opacity:1}}
+.bigcard::before{content:"";position:absolute;top:-60%;left:-30%;width:60%;height:220%;transform:rotate(18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);animation:shine 2.4s ease-in-out infinite}
+@keyframes shine{0%{left:-40%}60%,100%{left:120%}}
+.bigcard .kicker{font-size:11px;letter-spacing:.2em;color:var(--gold)}
+.bigcard .fl{font-size:52px;line-height:1.1;margin-top:6px}
+.bigcard .nm{font-size:20px;margin-top:4px}
+.bigcard .en{font-family:var(--en);font-size:13px;color:var(--muted);margin-top:2px}
+.bigcard .meta{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.bigcard .meta span{font-size:11px;background:rgba(0,0,0,.3);border:1px solid var(--line);padding:4px 10px;border-radius:99px}
+.bigcard .fact{font-size:12px;font-weight:400;line-height:1.7;margin-top:12px;text-align:left;
+  background:rgba(0,0,0,.25);border-radius:12px;padding:11px}
+.bigcard .learn{font-size:12px;font-weight:700;line-height:1.7;margin-top:10px;text-align:left;
+  border-left:3px solid var(--gold);padding-left:10px}
+.bigcard .learn i{display:block;font-style:normal;font-size:10px;color:var(--gold);letter-spacing:.12em;margin-bottom:3px}
+.bigcard .cheer{margin-top:14px;background:rgba(255,197,61,.14);border:1px solid rgba(255,197,61,.4);
+  border-radius:12px;padding:12px}
+.bigcard .cheer .en2{font-family:var(--en);font-size:20px}
+.bigcard .cheer .jp{font-size:12px;color:var(--muted);margin-top:3px;font-weight:400}
+.bigcard .cheer button{margin-top:8px;font-size:12px;padding:6px 12px;border-radius:99px;background:rgba(0,0,0,.3);border:1px solid var(--line)}
+
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
@@ -286,8 +340,13 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 
     <div class="week" id="h-week"></div>
 
+    <h2 class="sec">コース</h2>
+    <div class="cats" id="h-courses"></div>
+
     <div class="tiles">
+      <button class="tile speak" id="b-speak"><div class="ic">🎤</div><div><b>はなして学ぶ</b><span id="h-speakn">声に出して練習</span></div></button>
       <button class="tile alert" id="b-drill"><div class="ic">🎯</div><div><b>とっくん</b><span id="h-drilln">にがて 0語</span></div></button>
+      <button class="tile" id="b-cards"><div class="ic">🃏</div><div><b>カード</b><span id="h-cardn">0 / 16 まい</span></div></button>
       <button class="tile" id="b-book"><div class="ic">📖</div><div><b>単語ずかん</b><span id="h-bookn">0 / 0 語</span></div></button>
       <button class="tile" id="b-stats"><div class="ic">🏆</div><div><b>きろく</b><span>スタッツとバッジ</span></div></button>
       <button class="tile" id="b-set"><div class="ic">⚙️</div><div><b>せってい</b><span>音声・問題数</span></div></button>
@@ -312,6 +371,26 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 
   <!-- ================= HALFTIME / RESULT ================= -->
   <section id="s-panel" class="hidden"></section>
+
+  <!-- ================= SPEAK ================= -->
+  <section id="s-speak" class="hidden">
+    <div class="qtop">
+      <span class="period">はなして学ぶ</span>
+      <span class="combo" id="sp-stars"></span>
+      <span class="qcount" id="sp-count">1/8</span>
+    </div>
+    <div class="touchline"><span class="ball" id="sp-ball" style="left:0%">🎤</span><span class="net">🥅</span></div>
+    <div class="prompt" id="sp-prompt"></div>
+    <div id="sp-area"></div>
+    <div class="btnrow"><button class="btn ghost" id="sp-quit">やめる</button></div>
+  </section>
+
+  <!-- ================= CARDS ================= -->
+  <section id="s-cards" class="hidden">
+    <h2 class="sec">プレーヤーカード</h2>
+    <div class="cardgrid" id="cd-grid"></div>
+    <div class="btnrow"><button class="btn ghost" data-home>ホームへもどる</button></div>
+  </section>
 
   <!-- ================= BOOK ================= -->
   <section id="s-book" class="hidden">
@@ -380,7 +459,8 @@ const CATS = [
   ["food","たべもの","🍔"],["school","がっこう","🏫"],["body","からだ","🖐️"],["family","かぞく","👨‍👩‍👧‍👦"],
   ["day","ようび","📅"],["month","つき","🗓️"],["sport","スポーツ","🏅"],["verb","どうさ","🏃"],
   ["feeling","きもち","😄"],["weather","てんき","☀️"],["place","ばしょ","🏙️"],["vehicle","のりもの","🚃"],
-  ["adj","ようす","✨"],["phrase","フレーズ","💬"],["idiom","じゅくご","🔑"]
+  ["adj","ようす","✨"],["phrase","フレーズ","💬"],["idiom","じゅくご","🔑"],
+  ["greet","あいさつ","👋"],["talk","おしゃべり","🗣️"],["out","おでかけ","🗺️"],["help","こまったとき","🆘"]
 ];
 const RAW = [
 /* soccer */
@@ -556,12 +636,173 @@ const RAW = [
 ["a lot of","たくさんの","📚","idiom",2],["after school","ほうかご","🏫","idiom",1],["every day","まいにち","📅","idiom",1],
 ["over there","あそこに","👉","idiom",2],["take care","きをつけてね","🤗","idiom",2],["of course","もちろん","👌","idiom",2],
 ["come on","さあ、いこう","🔥","idiom",2],["go home","いえにかえる","🏠","idiom",1],["play with","～とあそぶ","🤾","idiom",1],
-["look for","～をさがす","🔍","idiom",2],["get on","～にのる","🚌","idiom",2],["stand up","たちあがる","🧍","idiom",1]
+["look for","～をさがす","🔍","idiom",2],["get on","～にのる","🚌","idiom",2],["stand up","たちあがる","🧍","idiom",1],
+/* ===== 日常会話コース：あいさつ・じこしょうかい ===== */
+["Good afternoon.","こんにちは。","🌞","greet",1],
+["Good evening.","こんばんは。","🌆","greet",1],
+["How's it going?","ちょうし どう？","😃","greet",2],
+["Not bad.","わるくないよ。","🙂","greet",2],
+["What's your name?","なまえは なに？","🙋","greet",1],
+["I'm in the fifth grade.","5年生です。","🎒","greet",2],
+["I'm eleven years old.","11さいです。","🎂","greet",2],
+["Nice to see you again.","また会えて うれしい。","🤝","greet",2],
+["This is my friend Ken.","こちらは 友だちのケン。","🧑‍🤝‍🧑","greet",2],
+["How was your day?","きょうは どうだった？","🌤️","greet",2],
+["It was great!","さいこうだった！","🎉","greet",1],
+["Long time no see.","ひさしぶり。","👋","greet",2],
+["Take care!","気をつけてね！","🤗","greet",1],
+["Have a nice day!","よい1日を！","☀️","greet",1],
+["Talk to you later.","また あとでね。","📱","greet",2],
+["Where are you from?","どこから 来たの？","🌍","greet",2],
+["I live in Tokyo.","東京に すんでいます。","🏙️","greet",2],
+["I'm so sleepy.","めっちゃ ねむい。","😪","greet",1],
+/* ===== 日常会話コース：ともだちとの おしゃべり ===== */
+["What are you doing?","なにしてるの？","🤔","talk",1],
+["I'm watching a game.","しあいを 見てるよ。","📺","talk",2],
+["Do you want to play?","あそぶ？","🎮","talk",1],
+["Sure!","もちろん！","👍","talk",1],
+["Maybe later.","あとでね。","⏰","talk",1],
+["That's cool!","それ、かっこいい！","😎","talk",1],
+["Really?","ほんとに？","😲","talk",1],
+["I don't know.","わからない。","🤷","talk",1],
+["Wait a minute.","ちょっと待って。","✋","talk",1],
+["Let's go!","行こう！","🏃","talk",1],
+["I'm on my way.","いま 向かってる。","🚶","talk",2],
+["Can I join you?","まぜて（いっしょに いい）？","🙋","talk",2],
+["It's my turn.","ぼくの番だよ。","🔄","talk",2],
+["Good luck!","がんばって！","🍀","talk",1],
+["Well done!","よく できたね！","👏","talk",1],
+["That was close!","おしかった！","😖","talk",2],
+["I did it!","できた！","🙌","talk",1],
+["Let me try again.","もう1回 やらせて。","🔁","talk",2],
+["What do you think?","どう思う？","💭","talk",2],
+["I think so, too.","ぼくも そう思う。","🤝","talk",2],
+["No way!","うそでしょ！","😱","talk",2],
+["See you tomorrow.","また 明日ね。","👋","talk",1],
+/* ===== 日常会話コース：おでかけ・かいもの ===== */
+["How much is this?","これ いくら？","💰","out",1],
+["I'll take this one.","これを ください。","🛍️","out",2],
+["Do you have this in blue?","青いのは ありますか。","🔵","out",3],
+["Where is the bathroom?","トイレは どこですか。","🚻","out",1],
+["Can I have some water?","お水を ください。","💧","out",2],
+["I'm hungry.","おなか すいた。","🍽️","out",1],
+["Let's eat!","食べよう！","🍴","out",1],
+["It's delicious!","おいしい！","😋","out",1],
+["Check, please.","おかいけい お願いします。","🧾","out",2],
+["Is this seat free?","この席 あいてますか。","💺","out",3],
+["Excuse me, can you help me?","すみません、助けてもらえますか。","🙏","out",2],
+["I'm looking for the station.","駅を さがしています。","🚉","out",2],
+["It's over there.","あそこですよ。","👉","out",1],
+["How do I get there?","どうやって 行きますか。","🗺️","out",3],
+["It takes ten minutes.","10分 かかります。","⏱️","out",2],
+["One ticket, please.","チケット1まい ください。","🎟️","out",2],
+["Which bus goes to the park?","どのバスが 公園に行きますか。","🚌","out",3],
+["I'm lost.","道に まよいました。","😵","out",2],
+["Thank you for your help.","助けてくれて ありがとう。","🙇","out",2],
+["Have a good trip!","よい旅を！","✈️","out",2],
+/* ===== 日常会話コース：こまったとき ===== */
+["Are you OK?","だいじょうぶ？","😟","help",1],
+["I'm OK.","だいじょうぶだよ。","🙆","help",1],
+["I don't feel well.","ぐあいが わるい。","🤒","help",2],
+["I have a headache.","頭が いたい。","🤕","help",2],
+["My leg hurts.","足が いたい。","🦵","help",2],
+["I need help.","助けて ほしい。","🆘","help",1],
+["Call a teacher!","先生を よんで！","🏫","help",2],
+["Be careful!","気をつけて！","⚠️","help",1],
+["Don't worry.","しんぱい しないで。","🤗","help",1],
+["Take your time.","ゆっくりで いいよ。","⏳","help",2],
+["Can you say that again?","もう1回 言ってくれる？","🔁","help",2],
+["I don't understand.","わかりません。","😕","help",1],
+["How do you say this in English?","これ 英語で なんて言うの？","🔤","help",3],
+["Sorry, my mistake.","ごめん、ぼくのミス。","🙏","help",2]
 ];
 
+const PHRASE_CATS=["phrase","greet","talk","out","help"];
 const ITEMS = RAW.map((r,i)=>({id:i,w:r[0],j:r[1],e:r[2],c:r[3],lv:r[4],
-  isP:(r[3]==="phrase"), chunks:r[0].split(" ")}));
+  isP:PHRASE_CATS.indexOf(r[3])>=0, chunks:r[0].split(" ")}));
 const BY_CAT={}; ITEMS.forEach(it=>{(BY_CAT[it.c]=BY_CAT[it.c]||[]).push(it)});
+/* 声に出して練習する価値があるもの＝文とじゅくご */
+const SPEAKABLE=ITEMS.filter(it=>it.isP||it.c==="idiom");
+
+/* コース：デイリーミッションの出題範囲 */
+const COURSES=[
+  {k:"all",  n:"ぜんぶ",     e:"🌈", cats:null},
+  {k:"word", n:"きほん単語", e:"🔤", cats:["color","number","animal","food","school","body","family","day","month","verb","feeling","weather","place","vehicle","adj","sport"]},
+  {k:"daily",n:"日常会話",   e:"💬", cats:["greet","talk","out","help","phrase","idiom"]},
+  {k:"soc",  n:"サッカー",   e:"⚽", cats:["soccer","sport"]}
+];
+
+/* =========================================================
+   プレーヤーカード
+   注意：cheer は「その選手の発言」ではなく、アプリからの応援フレーズ。
+   fact は実際の経歴のみを書く。learn はその選手の姿勢から学べること。
+   ========================================================= */
+const PLAYERS=[
+ {k:"messi",n:"リオネル・メッシ",en:"Lionel Messi",fl:"🇦🇷",pos:"FW",co:"アルゼンチン",
+  fact:"2022年ワールドカップ優勝。バロンドール受賞多数。左足のドリブルで世界の頂点に立った。",
+  learn:"体が大きくなくても世界一になれる。武器は、毎日みがいた足もとの技術。",
+  cheer:"Small steps, big goals!",cheerJ:"小さな一歩が、大きなゴールに。",cond:"first",tier:1},
+ {k:"mitoma",n:"三笘 薫",en:"Kaoru Mitoma",fl:"🇯🇵",pos:"FW",co:"日本",
+  fact:"日本代表。2022年ワールドカップのスペイン戦で、ゴールラインぎりぎりのボールを折り返しアシスト。",
+  learn:"大学までドリブルを研究し続けた努力の人。あきらめずに足をのばすと、とどく。",
+  cheer:"Never give up!",cheerJ:"ぜったいに あきらめるな！",cond:"s3",tier:1},
+ {k:"kubo",n:"久保 建英",en:"Takefusa Kubo",fl:"🇯🇵",pos:"MF",co:"日本",
+  fact:"日本代表。10代からスペインでプレーし、左足の技術と判断力で評価された。",
+  learn:"言葉のちがう国でも、練習と言葉を覚えることでチームに入っていける。",
+  cheer:"Keep practicing!",cheerJ:"練習を つづけよう！",cond:"w20",tier:1},
+ {k:"ronaldinho",n:"ロナウジーニョ",en:"Ronaldinho",fl:"🇧🇷",pos:"MF",co:"ブラジル",
+  fact:"2002年ワールドカップ優勝、2005年バロンドール受賞。創造的なプレーと笑顔で知られた。",
+  learn:"サッカーは楽しむもの。楽しんでいる人がいちばん伸びる。",
+  cheer:"Have fun!",cheerJ:"楽しもう！",cond:"combo10",tier:2},
+ {k:"mbappe",n:"キリアン・エムバペ",en:"Kylian Mbappé",fl:"🇫🇷",pos:"FW",co:"フランス",
+  fact:"2018年ワールドカップ優勝。19歳で決勝戦にゴールを決めた。世界最速クラスのスピード。",
+  learn:"若さは弱点じゃない。今できることを全速力でやればいい。",
+  cheer:"Go for it!",cheerJ:"思いきって いけ！",cond:"g50",tier:2},
+ {k:"haaland",n:"アーリング・ハーランド",en:"Erling Haaland",fl:"🇳🇴",pos:"FW",co:"ノルウェー",
+  fact:"ノルウェー代表のストライカー。ゴール前での強さと決定力で、驚異的な得点ペースを記録してきた。",
+  learn:"得意なことを1つ、とことん伸ばすと武器になる。",
+  cheer:"One more goal!",cheerJ:"もう1点 とろう！",cond:"g100",tier:2},
+ {k:"modric",n:"ルカ・モドリッチ",en:"Luka Modrić",fl:"🇭🇷",pos:"MF",co:"クロアチア",
+  fact:"2018年バロンドール受賞。同年のワールドカップで小国クロアチアを準優勝に導いた。",
+  learn:"走る量と、まわりを見る目。はでじゃなくてもチームを動かせる。",
+  cheer:"Look around you!",cheerJ:"まわりを 見よう！",cond:"s7",tier:2},
+ {k:"debruyne",n:"ケビン・デ・ブライネ",en:"Kevin De Bruyne",fl:"🇧🇪",pos:"MF",co:"ベルギー",
+  fact:"ベルギー代表。正確なパスとクロスでアシストを量産してきた司令塔。",
+  learn:"点を取る人だけが主役じゃない。人を生かす力も一流の武器。",
+  cheer:"Pass it on!",cheerJ:"つないで いこう！",cond:"lv5",tier:2},
+ {k:"neymar",n:"ネイマール",en:"Neymar",fl:"🇧🇷",pos:"FW",co:"ブラジル",
+  fact:"ブラジル代表。ドリブルとテクニックで知られ、五輪では母国に金メダルをもたらした。",
+  learn:"うまくいかない日もある。それでも次の試合でまた仕掛ければいい。",
+  cheer:"Try again!",cheerJ:"もう1回 チャレンジ！",cond:"w50",tier:3},
+ {k:"vinicius",n:"ヴィニシウス・ジュニオール",en:"Vinícius Júnior",fl:"🇧🇷",pos:"FW",co:"ブラジル",
+  fact:"ブラジル代表。左サイドからの突破で相手をはがし、大舞台で結果を出してきた。",
+  learn:"最初は決められなくても、続けるうちに形になる。",
+  cheer:"Keep going!",cheerJ:"その調子で つづけよう！",cond:"lv10",tier:3},
+ {k:"bellingham",n:"ジュード・ベリンガム",en:"Jude Bellingham",fl:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",pos:"MF",co:"イングランド",
+  fact:"イングランド代表。10代のうちからトップクラブの中心選手として活躍した。",
+  learn:"年下でも、声を出して走れば信頼される。",
+  cheer:"Believe in yourself!",cheerJ:"自分を しんじろう！",cond:"w100",tier:3},
+ {k:"cr7",n:"クリスティアーノ・ロナウド",en:"Cristiano Ronaldo",fl:"🇵🇹",pos:"FW",co:"ポルトガル",
+  fact:"ポルトガル代表。EURO2016優勝。高いジャンプのヘディングと、練習量の多さで知られる。",
+  learn:"才能より練習量。毎日つづけた人が最後に残る。",
+  cheer:"Work hard every day!",cheerJ:"毎日 こつこつ！",cond:"s30",tier:3},
+ {k:"zidane",n:"ジネディーヌ・ジダン",en:"Zinédine Zidane",fl:"🇫🇷",pos:"MF",co:"フランス",
+  fact:"1998年ワールドカップ優勝、1998年バロンドール受賞。落ち着いたボールコントロールで知られた。",
+  learn:"あわてないこと。落ち着いている人のところに、ボールも答えも集まる。",
+  cheer:"Stay calm!",cheerJ:"落ち着いて いこう！",cond:"g300",tier:4},
+ {k:"sawa",n:"澤 穂希",en:"Homare Sawa",fl:"🇯🇵",pos:"MF",co:"日本",
+  fact:"2011年女子ワールドカップで日本を優勝に導き、得点王とMVPを同時に受賞した。",
+  learn:"苦しいときは、上ではなく前を見る。長く続けた人にごほうびが来る。",
+  cheer:"Look forward!",cheerJ:"前を 見よう！",cond:"s14",tier:4},
+ {k:"maradona",n:"ディエゴ・マラドーナ",en:"Diego Maradona",fl:"🇦🇷",pos:"MF",co:"アルゼンチン",
+  fact:"1986年ワールドカップ優勝。準々決勝で見せた5人抜きのゴールは歴史に残る。",
+  learn:"だれかの真似じゃない、自分だけのプレーをさがそう。",
+  cheer:"Be yourself!",cheerJ:"自分らしく いこう！",cond:"lv15",tier:4},
+ {k:"pele",n:"ペレ",en:"Pelé",fl:"🇧🇷",pos:"FW",co:"ブラジル",
+  fact:"ワールドカップを3回（1958・1962・1970年）制した唯一の選手。17歳で初優勝を経験した。",
+  learn:"「王様」も最初は17歳の新人だった。はじまりは、いつも小さい。",
+  cheer:"Dream big!",cheerJ:"大きな ゆめを もとう！",cond:"w200",tier:4}
+];
 
 const RANKS=[[1,"ルーキー","🔰"],[3,"レギュラー","⚽"],[6,"エース","🌟"],[10,"キャプテン","🎖️"],
              [15,"日本代表","🇯🇵"],[22,"ワールドクラス","🌍"],[30,"レジェンド","👑"]];
@@ -578,7 +819,8 @@ const INTERVALS=[0,1,2,4,8,16,32,60];
 /* ========================= STATE ========================= */
 const KEY="soccer-english-v1";
 const DEF={xp:0,streak:0,best:0,last:"",days:{},goals:0,shots:0,bestCombo:0,
-           srs:{},badges:{},set:{rate:85,sfx:1,qn:12,tts:"auto"}};
+           srs:{},badges:{},cards:{},spoke:0,
+           set:{rate:85,sfx:1,qn:12,tts:"auto",course:"all"}};
 let S=load();
 function load(){try{const r=localStorage.getItem(KEY);if(!r)return JSON.parse(JSON.stringify(DEF));
   const o=JSON.parse(r);return Object.assign(JSON.parse(JSON.stringify(DEF)),o,{set:Object.assign({},DEF.set,o.set||{})});
@@ -682,7 +924,7 @@ function seenCount(){return Object.keys(S.srs).length}
 function weakItems(){return ITEMS.filter(it=>{const r=S.srs[it.w];return r&&r.b<=1&&r.wrong>0})}
 
 /* ========================= SCREENS ========================= */
-const SCREENS=["s-home","s-quiz","s-panel","s-book","s-stats","s-set"];
+const SCREENS=["s-home","s-quiz","s-panel","s-speak","s-cards","s-book","s-stats","s-set"];
 function show(id){SCREENS.forEach(s=>$("#"+s).classList.toggle("hidden",s!==id));window.scrollTo(0,0)}
 
 function renderHome(){
@@ -705,25 +947,37 @@ function renderHome(){
   }).join("");
   $("#h-drilln").textContent="にがて "+weakItems().length+"語";
   $("#h-bookn").textContent=masteredCount()+" / "+ITEMS.length+" 語";
+  $("#h-cardn").textContent=cardCount()+" / "+PLAYERS.length+" まい";
+  $("#h-speakn").textContent=srAvailable()?"声に出して練習":"聞いてリピート";
+  $("#h-courses").innerHTML=COURSES.map(c=>
+    '<button class="cat'+(c.k===S.set.course?" on":"")+'" data-k="'+c.k+'">'+c.e+" "+c.n+'</button>').join("");
+  [].forEach.call($("#h-courses").children,b=>b.onclick=()=>{
+    S.set.course=b.dataset.k;save();sfx("tap");renderHome();
+  });
   refreshTts();   /* 読み上げ警告バナーの出し入れはここに集約 */
 }
 
 /* ========================= QUIZ ENGINE ========================= */
 let Q=null;
+function courseOf(){return COURSES.find(c=>c.k===S.set.course)||COURSES[0]}
+function coursePool(){
+  const c=courseOf();
+  return c.cats?ITEMS.filter(it=>c.cats.indexOf(it.c)>=0):ITEMS;
+}
 function buildQueue(n,onlyWeak){
   const t=today();
-  let pool;
   if(onlyWeak){
-    pool=weakItems().slice();shuffle(pool);return pool.slice(0,Math.min(n,pool.length));
+    const pool=weakItems().slice();shuffle(pool);return pool.slice(0,Math.min(n,pool.length));
   }
-  const due=ITEMS.filter(it=>{const r=S.srs[it.w];return r&&r.due<=t});
+  const base=coursePool();
+  const due=base.filter(it=>{const r=S.srs[it.w];return r&&r.due<=t});
   due.sort((a,b)=>(S.srs[a.w].b-S.srs[b.w].b)||(S.srs[a.w].due<S.srs[b.w].due?-1:1));
-  const fresh=ITEMS.filter(it=>!S.srs[it.w]).sort((a,b)=>a.lv-b.lv);
+  const fresh=base.filter(it=>!S.srs[it.w]).sort((a,b)=>a.lv-b.lv);
   const q=[];
   const newCap=Math.max(3,Math.round(n*0.4));
   for(let i=0;i<due.length&&q.length<n-Math.min(newCap,fresh.length);i++)q.push(due[i]);
   for(let i=0;i<fresh.length&&q.length<n;i++)q.push(fresh[i]);
-  if(q.length<n){const seen=ITEMS.filter(it=>S.srs[it.w]&&q.indexOf(it)<0);shuffle(seen);
+  if(q.length<n){const seen=base.filter(it=>S.srs[it.w]&&q.indexOf(it)<0);shuffle(seen);
     for(let i=0;i<seen.length&&q.length<n;i++)q.push(seen[i]);}
   shuffle(q);return q;
 }
@@ -921,7 +1175,7 @@ function endGame(){
     if(S.streak>S.best)S.best=S.streak;
     S.last=t;
   }
-  const gained=checkBadges();
+  const gained=checkBadges(),cards=checkPlayers();
   save();
   const rate=Q.shots?Math.round(Q.goals/Q.shots*100):0;
   const li=levelInfo(),rk=rankOf(li.lv);
@@ -939,9 +1193,12 @@ function endGame(){
   if(Q.newM.length)html+='<div class="newbadge">🆕 チームに加入： '+Q.newM.slice(0,4).map(x=>esc(x.w)).join(" / ")+(Q.newM.length>4?" ほか":"")+'</div>';
   if(gained.length)html+='<div class="newbadge">🏅 バッジ獲得： '+gained.map(b=>b.e+" "+b.n).join("　")+'</div>';
   html+='<div class="newbadge" style="background:rgba(255,255,255,.05);border-color:var(--line)">'+rk[2]+' '+rk[1]+'　Lv.'+li.lv+'　（つぎのレベルまで '+(li.need-li.rest)+' XP）</div>';
-  html+='<div class="btnrow"><button class="btn" id="p-again">もう1試合 ⚽</button>'+
+  html+='<div class="btnrow">'+
+        (cards.length?'<button class="btn" id="p-card">🎁 あたらしいカード！</button>':'')+
+        '<button class="btn'+(cards.length?" ghost":"")+'" id="p-again">もう1試合 ⚽</button>'+
         '<button class="btn ghost" data-home>ホームへもどる</button></div></div>';
   $("#s-panel").innerHTML=html;show("s-panel");
+  if(cards.length)$("#p-card").onclick=()=>revealCards(cards);
   $("#p-again").onclick=()=>startGame(false);
   bindHome();
 }
@@ -953,6 +1210,266 @@ function checkBadges(){
   BADGES.forEach(b=>{if(cond[b.k]&&!S.badges[b.k]){S.badges[b.k]=today();got.push(b)}});
   if(got.length)sfx("level");
   return got;
+}
+
+/* =========================================================
+   はなして学ぶ（スピーキング）
+   小5の発音でも通るよう、判定はかなり甘めに振ってある。
+   ========================================================= */
+const SRClass=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+function srAvailable(){return !!SRClass&&S.set.tts!=="off"}
+function norm(s){return (s||"").toLowerCase().replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim()}
+function lev(a,b){
+  const m=a.length,n=b.length;if(!m)return n;if(!n)return m;
+  let prev=Array.from({length:n+1},(_,i)=>i),cur=new Array(n+1);
+  for(let i=1;i<=m;i++){cur[0]=i;
+    for(let j=1;j<=n;j++)cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    const t=prev;prev=cur;cur=t;}
+  return prev[n];
+}
+/* 子どもの発音ゆれを許す語一致 */
+function wordClose(x,y){
+  if(x===y)return true;
+  if(Math.abs(x.length-y.length)>2)return false;
+  return lev(x,y)<=(y.length<=4?1:2);
+}
+function speakScore(said,target){
+  const a=norm(said).split(" ").filter(Boolean);
+  const b=norm(target).split(" ").filter(Boolean);
+  if(!b.length)return 0;
+  const pool=a.slice();let hit=0;
+  b.forEach(w=>{
+    let i=pool.findIndex(x=>x===w);
+    if(i<0)i=pool.findIndex(x=>wordClose(x,w));
+    if(i>=0){pool.splice(i,1);hit++}
+  });
+  return hit/b.length;
+}
+let SP=null,rec=null;
+function startSpeak(){
+  const pool=SPEAKABLE.slice();
+  /* コースが選ばれていれば、その範囲の文を優先 */
+  const c=courseOf();
+  let use=c.cats?pool.filter(it=>c.cats.indexOf(it.c)>=0):pool;
+  if(use.length<8)use=pool;
+  shuffle(use);
+  SP={queue:use.slice(0,8),i:0,stars:0,xp:0,tries:0,best:[]};
+  sfx("whistle");show("s-speak");renderSpeak();
+}
+function renderSpeak(){
+  if(SP.i>=SP.queue.length)return endSpeak();
+  const it=SP.queue[SP.i];
+  SP.tries=0;
+  $("#sp-count").textContent=(SP.i+1)+"/"+SP.queue.length;
+  $("#sp-ball").style.left=Math.min(88,SP.i/SP.queue.length*88)+"%";
+  $("#sp-stars").textContent="⭐ "+SP.stars;
+  $("#sp-stars").classList.add("on");
+  $("#sp-prompt").innerHTML=
+    '<div class="hint">こえに出して いってみよう</div>'+
+    (it.e?'<div class="emo" style="font-size:44px">'+it.e+'</div>':'')+
+    '<div class="big" style="font-size:26px">'+esc(it.w)+'</div>'+
+    '<div style="font-size:13px;margin-top:6px;color:rgba(255,255,255,.9)">'+esc(it.j)+'</div>'+
+    '<div><button class="replay" id="sp-listen">🔊 おてほん</button></div>';
+  $("#sp-listen").onclick=()=>speak(it.w);
+  if(ttsUsable())setTimeout(()=>speak(it.w),300);
+  renderMic(it);
+}
+function renderMic(it){
+  const A=$("#sp-area");
+  if(!srAvailable()){
+    /* 音声認識が無い端末：シャドーイング（自己申告）に切りかえる */
+    A.innerHTML='<div class="mictip">おてほんを聞いて、同じように言ってみよう。<br>言えたらボタンを押してね。</div>'+
+      '<div class="sp-actions"><button class="btn" id="sp-said">言えた！ ⭐</button>'+
+      '<button class="btn ghost" id="sp-skip">パス</button></div>';
+    $("#sp-said").onclick=()=>{awardSpeak(it,1,null,true)};
+    $("#sp-skip").onclick=()=>{SP.i++;renderSpeak()};
+    return;
+  }
+  A.innerHTML='<button class="mic" id="sp-mic">🎤</button>'+
+    '<div class="mictip" id="sp-tip">マイクをタップして、英語で言ってみよう</div>'+
+    '<div class="sp-actions"><button class="btn ghost" id="sp-again">🔊 もういちど聞く</button>'+
+    '<button class="btn ghost" id="sp-skip">パス</button></div>';
+  $("#sp-again").onclick=()=>speak(it.w);
+  $("#sp-skip").onclick=()=>{stopRec();SP.i++;renderSpeak()};
+  $("#sp-mic").onclick=()=>listen(it);
+}
+function stopRec(){try{if(rec){rec.onend=null;rec.abort();rec=null}}catch(e){}}
+function listen(it){
+  stopRec();
+  const mic=$("#sp-mic"),tip=$("#sp-tip");
+  try{rec=new SRClass()}catch(e){tip.textContent="マイクをつかえませんでした。";return}
+  rec.lang="en-US";rec.interimResults=false;rec.maxAlternatives=5;rec.continuous=false;
+  let done=false;
+  mic.classList.add("rec");mic.textContent="👂";tip.textContent="きいているよ…　いまはなしてね";
+  rec.onresult=e=>{
+    done=true;
+    let best=0,said="";
+    for(let i=0;i<e.results[0].length;i++){
+      const alt=e.results[0][i].transcript;
+      const s=speakScore(alt,it.w);
+      if(s>best){best=s;said=alt}
+      if(!said)said=alt;
+    }
+    awardSpeak(it,best,said,false);
+  };
+  rec.onerror=ev=>{
+    done=true;mic.classList.remove("rec");mic.textContent="🎤";
+    if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){
+      tip.innerHTML="マイクの きょかが 必要です。<br>ブラウザの「マイクを許可」を選んでね。";
+    } else if(ev.error==="no-speech"){
+      tip.textContent="こえが 聞こえなかったよ。もう1回タップしてね。";
+    } else if(ev.error==="network"){
+      tip.textContent="ネットにつながっていないと つかえません。";
+    } else {
+      tip.textContent="もう1回 タップしてみてね。";
+    }
+  };
+  rec.onend=()=>{
+    mic.classList.remove("rec");mic.textContent="🎤";
+    if(!done)tip.textContent="うまく聞きとれなかった。もう1回タップしてね。";
+  };
+  try{rec.start()}catch(e){tip.textContent="もう1回 タップしてね。"}
+}
+function awardSpeak(it,score,said,selfReport){
+  SP.tries++;
+  const A=$("#sp-area");
+  /* 甘め配点：半分ことばが合っていれば合格にする */
+  let stars,xp,msg;
+  if(selfReport){stars=1;xp=12;msg="よく言えた！";}
+  else if(score>=.8){stars=3;xp=25;msg="PERFECT! かんぺき！";}
+  else if(score>=.55){stars=2;xp=18;msg="NICE! よく つたわるよ！";}
+  else if(score>=.3){stars=1;xp=12;msg="OK! つうじる つうじる！";}
+  else {stars=0;xp=0;msg="おしい！ もう1回 いってみよう";}
+
+  if(stars===0&&SP.tries<2){
+    A.innerHTML='<div class="stars">☆☆☆</div><div class="mictip">'+msg+'</div>'+
+      (said?'<div class="heard">こう きこえたよ<br><b>'+esc(said)+'</b></div>':'')+
+      '<div class="sp-actions"><button class="btn" id="sp-retry">🎤 もう1回</button>'+
+      '<button class="btn ghost" id="sp-next">つぎへ</button></div>';
+    $("#sp-retry").onclick=()=>{renderMic(it);listen(it)};
+    $("#sp-next").onclick=()=>{SP.i++;renderSpeak()};
+    sfx("bad");speak(it.w);
+    return;
+  }
+  if(stars===0){stars=1;xp=10;msg="ナイス チャレンジ！ 声に出したのがえらい";}
+
+  SP.stars+=stars;SP.xp+=xp;S.xp+=xp;S.spoke++;
+  /* 通じたなら、その文の定着度も進める */
+  if(stars>=2){
+    const r=S.srs[it.w]||(S.srs[it.w]={b:0,due:today(),seen:0,ok:0,wrong:0});
+    r.seen++;r.ok++;r.b=Math.min(7,r.b+1);r.due=dayStr(INTERVALS[r.b]);
+  }
+  save();
+  sfx(stars>=2?"good":"tap");
+  if(stars>=2)confetti();
+  A.innerHTML='<div class="stars">'+"★".repeat(stars)+"☆".repeat(3-stars)+'</div>'+
+    '<div class="mictip">'+msg+'　<span style="color:var(--gold)">+'+xp+' XP</span></div>'+
+    (said?'<div class="heard">こう きこえたよ<br><b>'+esc(said)+'</b></div>':'')+
+    '<div class="sp-actions"><button class="btn ghost" id="sp-retry">🎤 もう1回</button>'+
+    '<button class="btn" id="sp-next">つぎへ ▶</button></div>';
+  $("#sp-retry").onclick=()=>{renderMic(it);if(srAvailable())listen(it)};
+  $("#sp-next").onclick=()=>{SP.i++;renderSpeak()};
+  speak(it.w);
+}
+function endSpeak(){
+  sfx("whistle");
+  const t=today(),first=!S.days[t];
+  if(first){
+    S.days[t]=1;
+    if(S.last===dayStr(-1))S.streak++;else if(S.last!==t)S.streak=1;
+    if(S.streak>S.best)S.best=S.streak;
+    S.last=t;
+  }
+  const gained=checkBadges(),cards=checkPlayers();
+  save();
+  const max=SP.queue.length*3;
+  $("#s-panel").innerHTML='<div class="panel">'+
+    '<div class="kicker">SPEAKING DONE</div><h2>'+(SP.stars>=max*.8?"GREAT VOICE":"GOOD TRY")+'</h2>'+
+    '<div class="score">'+SP.stars+'</div><div style="font-size:12px;color:var(--muted)">★ / '+max+'</div>'+
+    '<div class="stats"><div><span>かくとく XP</span><b>'+SP.xp+'</b></div>'+
+    '<div><span>れんぞく日数</span><b>'+S.streak+'</b></div></div>'+
+    (gained.length?'<div class="newbadge">🏅 バッジ獲得： '+gained.map(b=>b.e+" "+b.n).join("　")+'</div>':'')+
+    '<div class="btnrow">'+
+      (cards.length?'<button class="btn" id="p-card">🎁 あたらしいカード！</button>':'')+
+      '<button class="btn'+(cards.length?" ghost":"")+'" id="p-again">もう1セット 🎤</button>'+
+      '<button class="btn ghost" data-home>ホームへもどる</button></div></div>';
+  show("s-panel");
+  if(cards.length)$("#p-card").onclick=()=>revealCards(cards);
+  $("#p-again").onclick=()=>startSpeak();
+  bindHome();
+}
+
+/* ========================= プレーヤーカード ========================= */
+function cardCount(){return Object.keys(S.cards).length}
+function checkPlayers(){
+  const li=levelInfo(),m=masteredCount(),got=[];
+  const cond={
+    first:S.goals>=1, s3:S.streak>=3, w20:m>=20, combo10:S.bestCombo>=10,
+    g50:S.goals>=50, g100:S.goals>=100, s7:S.streak>=7, lv5:li.lv>=5,
+    w50:m>=50, lv10:li.lv>=10, w100:m>=100, s30:S.streak>=30,
+    g300:S.goals>=300, s14:S.streak>=14, lv15:li.lv>=15, w200:m>=200
+  };
+  PLAYERS.forEach(p=>{if(cond[p.cond]&&!S.cards[p.k]){S.cards[p.k]=today();got.push(p)}});
+  return got;
+}
+function condLabel(k){
+  return {first:"はじめての試合",s3:"3日れんぞく",w20:"20語マスター",combo10:"10れんぞくゴール",
+    g50:"つうさん50ゴール",g100:"つうさん100ゴール",s7:"7日れんぞく",lv5:"Lv.5",
+    w50:"50語マスター",lv10:"Lv.10",w100:"100語マスター",s30:"30日れんぞく",
+    g300:"つうさん300ゴール",s14:"14日れんぞく",lv15:"Lv.15",w200:"200語マスター"}[k]||"？";
+}
+function revealCards(list,idx){
+  idx=idx||0;
+  if(idx>=list.length){document.getElementById("reveal")&&document.getElementById("reveal").remove();return}
+  const p=list[idx];
+  let R=document.getElementById("reveal");
+  if(!R){R=document.createElement("div");R.id="reveal";document.body.appendChild(R)}
+  R.innerHTML=bigCardHtml(p,'<div class="btnrow"><button class="btn" id="rv-next">'+
+    (idx+1<list.length?"つぎのカードへ ▶":"うけとる 🤝")+'</button></div>');
+  sfx("level");confetti();
+  const cb=document.getElementById("rv-cheer");
+  if(cb)cb.onclick=()=>speak(p.cheer);
+  if(ttsUsable())setTimeout(()=>speak(p.cheer),700);
+  document.getElementById("rv-next").onclick=()=>{
+    R.remove();
+    if(idx+1<list.length)revealCards(list,idx+1);
+    else{renderHome()}
+  };
+}
+function bigCardHtml(p,footer){
+  return '<div class="bigcard">'+
+    '<div class="kicker">PLAYER CARD</div>'+
+    '<div class="fl">'+p.fl+'</div>'+
+    '<div class="nm">'+esc(p.n)+'</div>'+
+    '<div class="en">'+esc(p.en)+'</div>'+
+    '<div class="meta"><span>'+esc(p.co)+'</span><span>'+p.pos+'</span></div>'+
+    '<div class="fact">'+esc(p.fact)+'</div>'+
+    '<div class="learn"><i>この選手から 学べること</i>'+esc(p.learn)+'</div>'+
+    '<div class="cheer"><div class="en2">'+esc(p.cheer)+'</div>'+
+      '<div class="jp">'+esc(p.cheerJ)+'</div>'+
+      '<button id="rv-cheer">🔊 声に出して言ってみよう</button></div>'+
+    (footer||'')+'</div>';
+}
+function renderCards(){
+  $("#cd-grid").innerHTML=PLAYERS.map(p=>{
+    const got=!!S.cards[p.k];
+    return '<button class="pcard '+(got?"got":"locked")+'" data-k="'+p.k+'">'+
+      '<span class="tierbar t'+p.tier+'"></span>'+
+      '<span class="fl">'+(got?p.fl:"🔒")+'</span>'+
+      '<span class="nm">'+(got?esc(p.n):"？？？")+'</span>'+
+      '<span class="ps">'+(got?esc(p.co)+" ・ "+p.pos:"")+'</span>'+
+      '<span class="lk">'+(got?"":condLabel(p.cond)+"で ゲット")+'</span></button>';
+  }).join("");
+  [].forEach.call($("#cd-grid").children,b=>b.onclick=()=>{
+    const p=PLAYERS.find(x=>x.k===b.dataset.k);
+    if(!S.cards[p.k]){sfx("tap");return}
+    let R=document.getElementById("reveal");
+    if(!R){R=document.createElement("div");R.id="reveal";document.body.appendChild(R)}
+    R.innerHTML=bigCardHtml(p,'<div class="btnrow"><button class="btn ghost" id="rv-next">とじる</button></div>');
+    const cb=document.getElementById("rv-cheer");if(cb)cb.onclick=()=>speak(p.cheer);
+    document.getElementById("rv-next").onclick=()=>R.remove();
+  });
+  show("s-cards");bindHome();
 }
 
 /* ========================= BOOK ========================= */
@@ -1062,6 +1579,9 @@ $("#se-reset").onclick=()=>{
 function bindHome(){[].forEach.call(document.querySelectorAll("[data-home]"),b=>b.onclick=()=>{renderHome();show("s-home")})}
 $("#b-kick").onclick=()=>startGame(false);
 $("#b-drill").onclick=()=>{ if(!weakItems().length){alert("いまは にがてな単語がありません。まず1試合やってみよう！");return} startGame(true)};
+$("#b-speak").onclick=startSpeak;
+$("#b-cards").onclick=renderCards;
+$("#sp-quit").onclick=()=>{if(confirm("やめる？ ここまでのXPは記録されています。")){stopRec();renderHome();show("s-home")}};
 $("#b-book").onclick=renderBook;
 $("#b-stats").onclick=renderStats;
 $("#b-set").onclick=renderSet;
