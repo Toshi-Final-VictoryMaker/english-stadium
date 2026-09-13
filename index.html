@@ -239,6 +239,17 @@ h2.sec{font-size:12px;letter-spacing:.18em;color:var(--muted);margin:22px 0 8px;
 .seg button.on{background:var(--gold);color:#241800}
 input[type=range]{width:130px;accent-color:var(--accent)}
 .foot{margin-top:22px;text-align:center;font-size:11px;color:var(--muted);line-height:1.7}
+.warn{margin-top:12px;background:rgba(255,107,44,.14);border:1px solid rgba(255,107,44,.5);
+  border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.6}
+.warn span{font-size:11px;color:var(--muted);font-weight:400}
+.diag{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12px;font-weight:400}
+.diag dt{color:var(--muted)}
+.diag dd{margin:0;font-weight:700;word-break:break-word}
+.diag dd.ng{color:var(--bad)}.diag dd.ok{color:var(--good)}
+.howto{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;font-size:12px;font-weight:400;line-height:1.85;color:var(--muted)}
+.howto b{color:var(--flood)}
+.howto ol{margin:8px 0 0;padding-left:1.2em}
+.howto li{margin-bottom:5px}
 
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -336,8 +347,12 @@ input[type=range]{width:130px;accent-color:var(--accent)}
       <div class="setrow"><label>読み上げのはやさ</label><input type="range" id="se-rate" min="60" max="120" step="5"></div>
       <div class="setrow"><label>1試合の問題数</label><div class="seg" id="se-qn"></div></div>
       <div class="setrow"><label>こうかおん</label><div class="seg" id="se-sfx"></div></div>
+      <div class="setrow"><label>英語の読み上げ</label><div class="seg" id="se-tts"></div></div>
       <div class="setrow"><label>読み上げテスト</label><button class="seg" style="padding:8px 12px;border-radius:10px;background:#0e2731;border:1px solid var(--line);font-size:13px" id="se-test">🔊 Nice shot!</button></div>
     </div>
+    <h2 class="sec">音声しんだん</h2>
+    <div class="card" id="se-diag"></div>
+
     <h2 class="sec">おうちのかたへ</h2>
     <div class="card" style="font-size:12px;color:var(--muted);line-height:1.8;font-weight:400">
       このアプリは<b style="color:var(--flood)">間隔反復（まちがえた語ほど早く再出題）</b>で出題順を決めています。
@@ -355,6 +370,8 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 <div id="conf"></div>
 
 <script>
+const $=s=>document.querySelector(s);
+
 /* =========================================================
    DATA  —  [english, japanese, emoji, category, level]
    ========================================================= */
@@ -561,7 +578,7 @@ const INTERVALS=[0,1,2,4,8,16,32,60];
 /* ========================= STATE ========================= */
 const KEY="soccer-english-v1";
 const DEF={xp:0,streak:0,best:0,last:"",days:{},goals:0,shots:0,bestCombo:0,
-           srs:{},badges:{},set:{rate:85,sfx:1,qn:12}};
+           srs:{},badges:{},set:{rate:85,sfx:1,qn:12,tts:"auto"}};
 let S=load();
 function load(){try{const r=localStorage.getItem(KEY);if(!r)return JSON.parse(JSON.stringify(DEF));
   const o=JSON.parse(r);return Object.assign(JSON.parse(JSON.stringify(DEF)),o,{set:Object.assign({},DEF.set,o.set||{})});
@@ -573,21 +590,65 @@ function dayStr(off){const d=new Date();d.setDate(d.getDate()+off);
 
 /* ========================= AUDIO ========================= */
 let voices=[],ac=null,primed=false;
-function loadVoices(){try{voices=speechSynthesis.getVoices()||[]}catch(e){}}
-if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
+/* ok: null=未テスト / true=鳴った / false=鳴らない端末 */
+const TTS={sup:("speechSynthesis" in window),n:0,en:0,voice:"—",ok:null,fails:0};
+function loadVoices(){
+  try{voices=speechSynthesis.getVoices()||[]}catch(e){voices=[]}
+  TTS.n=voices.length;
+  TTS.en=voices.filter(v=>/^en(-|_)?/i.test(v.lang)).length;
+  const v=pickVoice();TTS.voice=v?(v.name+" ["+v.lang+"]"):"なし";
+  refreshTts();
+}
+if(TTS.sup){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
 function pickVoice(){
   const en=voices.filter(v=>/^en(-|_)?/i.test(v.lang));
   return en.find(v=>/Samantha|Google US English|Microsoft (Aria|Jenny|Zira)/i.test(v.name))||en.find(v=>/en-US/i.test(v.lang))||en[0]||null;
 }
-function speak(t){
-  if(!("speechSynthesis" in window))return;
-  try{speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(t.replace("P.E.","P E"));
-    u.lang="en-US";u.rate=S.set.rate/100;u.pitch=1.05;
-    const v=pickVoice(); if(v)u.voice=v;
-    speechSynthesis.speak(u);
-  }catch(e){}
+/* 読み上げが使えるか。
+   端末によっては「音が出ていないのに再生開始イベントだけ発火」するため、
+   自動検知は当てにできない。せっていの手動スイッチ(S.set.tts)を最優先する。 */
+function ttsUsable(){
+  if(S.set.tts==="off")return false;        /* 人が「聞こえない」と判断 */
+  if(S.set.tts==="on")return TTS.sup;       /* 人が「聞こえた」と判断（推測より優先） */
+  return TTS.sup&&TTS.ok!==false&&!(TTS.n>0&&TTS.en===0);   /* auto: 推測 */
 }
+function speak(t){
+  if(S.set.tts==="off")return;
+  if(!TTS.sup){TTS.ok=false;refreshTts();return}
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t.replace("P.E.","P E"));
+    const v=pickVoice();
+    if(v)u.voice=v;
+    u.lang=v?v.lang:"en-US";
+    u.rate=S.set.rate/100;u.pitch=1.05;u.volume=1;
+    let started=false;
+    u.onstart=()=>{started=true;TTS.fails=0;if(TTS.ok!==true){TTS.ok=true;refreshTts()}};
+    u.onerror=()=>{markTtsFail()};
+    speechSynthesis.speak(u);
+    /* onstart が来なければエンジン不在とみなす（Androidで無音になるケース） */
+    setTimeout(()=>{if(!started)markTtsFail()},1400);
+  }catch(e){markTtsFail()}
+}
+function markTtsFail(){
+  TTS.fails++;
+  if(TTS.fails>=2&&TTS.ok!==false){TTS.ok=false;refreshTts()}
+}
+function refreshTts(){try{
+  const home=document.getElementById("s-home");
+  if(home){
+    let el=document.getElementById("ttswarn");
+    if(!ttsUsable()&&S.set.tts!=="off"){   /* 意図的にOFFにした場合は警告を出さない */
+      if(!el){
+        el=document.createElement("div");el.id="ttswarn";el.className="warn";
+        el.innerHTML='⚠️ この端末では<b>英語の読み上げが鳴らない</b>ようです。<br>'+
+          '<span>音声なしの問題だけに切りかえたので学習は続けられます。直すには <b>せってい → 音声しんだん</b> へ。</span>';
+        home.insertBefore(el,home.children[1]);
+      }
+    } else if(el){el.remove()}
+  }
+  if(document.getElementById("se-diag"))renderDiag();
+}catch(e){}}
 function prime(){ if(primed)return; primed=true;
   try{ac=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
   if("speechSynthesis" in window){try{const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}catch(e){}}
@@ -621,7 +682,6 @@ function seenCount(){return Object.keys(S.srs).length}
 function weakItems(){return ITEMS.filter(it=>{const r=S.srs[it.w];return r&&r.b<=1&&r.wrong>0})}
 
 /* ========================= SCREENS ========================= */
-const $=s=>document.querySelector(s);
 const SCREENS=["s-home","s-quiz","s-panel","s-book","s-stats","s-set"];
 function show(id){SCREENS.forEach(s=>$("#"+s).classList.toggle("hidden",s!==id));window.scrollTo(0,0)}
 
@@ -645,6 +705,7 @@ function renderHome(){
   }).join("");
   $("#h-drilln").textContent="にがて "+weakItems().length+"語";
   $("#h-bookn").textContent=masteredCount()+" / "+ITEMS.length+" 語";
+  refreshTts();   /* 読み上げ警告バナーの出し入れはここに集約 */
 }
 
 /* ========================= QUIZ ENGINE ========================= */
@@ -669,15 +730,15 @@ function buildQueue(n,onlyWeak){
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
 
 function modeFor(it){
-  const b=box(it);
+  const b=box(it),tts=ttsUsable();
   if(it.isP){
     if(b>=1&&it.chunks.length>=3&&it.chunks.length<=6&&Math.random()<.55)return "order";
-    return Math.random()<.5?"listen":"en2ja";
+    return (tts&&Math.random()<.5)?"listen":"en2ja";
   }
   const r=Math.random();
-  if(b<0)return r<.6?"en2ja":"listen";          /* first meeting: show the word */
+  if(b<0)return (tts&&r>=.6)?"listen":"en2ja";   /* first meeting: show the word */
   if(it.e&&r<.22)return "emoji";
-  if(r<.5)return "listen";
+  if(r<.5)return tts?"listen":"ja2en";           /* 音が使えない端末は日本語→英語で代替 */
   if(r<.78)return "en2ja";
   return "ja2en";
 }
@@ -707,7 +768,10 @@ function nextQ(){
   renderQ();
 }
 function renderQ(){
-  const it=Q.queue[Q.i],mode=Q.extra?(it.isP?"en2ja":(Math.random()<.5?"listen":"en2ja")):modeFor(it);
+  const it=Q.queue[Q.i];
+  let mode=Q.extra?(it.isP?"en2ja":(Math.random()<.5?"listen":"en2ja")):modeFor(it);
+  /* 読み上げが鳴らない端末では音だけが手がかりの問題を出さない */
+  if(mode==="listen"&&!ttsUsable())mode="en2ja";
   Q.cur={it,mode,answered:false};
   const isExtra=Q.extra;
   $("#q-period").textContent=Q.weak?"とっくん":isExtra?"ロスタイム":(Q.i<Q.total/2?"前半":"後半");
@@ -929,7 +993,61 @@ function renderSet(){
   [].forEach.call($("#se-qn").children,b=>b.onclick=()=>{S.set.qn=+b.dataset.n;save();renderSet()});
   $("#se-sfx").innerHTML=[[1,"ON"],[0,"OFF"]].map(x=>'<button data-v="'+x[0]+'" class="'+(S.set.sfx===x[0]?"on":"")+'">'+x[1]+'</button>').join("");
   [].forEach.call($("#se-sfx").children,b=>b.onclick=()=>{S.set.sfx=+b.dataset.v;save();renderSet()});
+  $("#se-tts").innerHTML=[["auto","じどう"],["on","つかう"],["off","つかわない"]].map(x=>'<button data-v="'+x[0]+'" class="'+(S.set.tts===x[0]?"on":"")+'">'+x[1]+'</button>').join("");
+  [].forEach.call($("#se-tts").children,b=>b.onclick=()=>{
+    S.set.tts=b.dataset.v;if(S.set.tts==="auto"){TTS.ok=null;TTS.fails=0}save();renderSet();renderHome();
+  });
+  renderDiag();
   show("s-set");bindHome();
+}
+function renderDiag(){
+  const el=document.getElementById("se-diag");if(!el)return;
+  const off=S.set.tts==="off";
+  const st=off?["つかわない設定にしています",""]
+            :S.set.tts==="on"?["つかう設定にしています","ok"]
+            :TTS.ok===true?["再生しました","ok"]
+            :TTS.ok===false?["再生できませんでした","ng"]:["まだテストしていません",""];
+  el.innerHTML='<dl class="diag">'+
+    '<dt>ブラウザ対応</dt><dd class="'+(TTS.sup?"ok":"ng")+'">'+(TTS.sup?"あり":"なし")+'</dd>'+
+    '<dt>音声データ数</dt><dd class="'+(TTS.n?"":"ng")+'">'+TTS.n+'</dd>'+
+    '<dt>英語の音声</dt><dd class="'+(TTS.en?"ok":"ng")+'">'+TTS.en+'</dd>'+
+    '<dt>使う音声</dt><dd>'+esc(TTS.voice)+'</dd>'+
+    '<dt>さいごのテスト</dt><dd class="'+st[1]+'">'+st[0]+'</dd>'+
+    '<dt>いまの出題</dt><dd class="'+(ttsUsable()?"ok":"")+'">'+(ttsUsable()?"音あり（リスニングも出す）":"音なし（絵と文字だけ）")+'</dd>'+
+    '</dl>'+
+    '<div class="btnrow"><button class="btn" id="dg-test">🔊 テスト再生</button></div>'+
+    '<div class="howto" style="border-top:0;padding-top:12px;margin-top:10px">'+
+      'いまの英語の声が <b>聞こえましたか？</b> 端末によっては「再生した」と記録されても実際には無音のことがあるため、'+
+      '<b>耳で聞いた結果を押してください。</b>ここで決めた設定が最優先されます。</div>'+
+    '<div class="btnrow" style="grid-template-columns:1fr 1fr">'+
+      '<button class="btn ghost" id="dg-yes">聞こえた ✅</button>'+
+      '<button class="btn ghost" id="dg-no">聞こえない ❌</button></div>'+
+    (ttsUsable()?'':howtoHtml());
+  /* テストは「つかわない」設定でも必ず鳴らしにいく（設定は変えない） */
+  $("#dg-test").onclick=()=>{
+    const prev=S.set.tts;
+    TTS.fails=0;TTS.ok=null;S.set.tts="auto";loadVoices();
+    speak("Nice shot! Don't give up!");
+    S.set.tts=prev;
+    setTimeout(renderDiag,1800);
+  };
+  $("#dg-yes").onclick=()=>{S.set.tts="on";TTS.ok=true;TTS.fails=0;save();renderHome();renderSet()};
+  $("#dg-no").onclick=()=>{S.set.tts="off";save();renderHome();renderSet()};
+}
+function howtoHtml(){
+  return '<div class="howto"><b>鳴らないときの直しかた（Android）</b>'+
+    '<ol>'+
+    '<li>Playストアで <b>「Speech Services by Google」</b>（Google テキスト読み上げ）をインストール</li>'+
+    '<li>本体の <b>設定 → 追加設定 → ユーザー補助 → テキスト読み上げ出力</b> を開く（機種により <b>設定 → システム → 言語と入力 → テキスト読み上げ</b>）</li>'+
+    '<li><b>優先するエンジン</b> を「Google テキスト読み上げ」に変更</li>'+
+    '<li><b>言語</b> で <b>English (United States)</b> を選び、音声データをダウンロード</li>'+
+    '<li>Chromeを完全に終了してから、このアプリを開き直す</li>'+
+    '</ol>'+
+    '<b style="display:block;margin-top:12px">iPhoneの場合</b>'+
+    '設定 → アクセシビリティ → 読み上げコンテンツ → 声 → 英語 で音声を追加。本体横の<b>マナーモードスイッチ</b>も解除してください。'+
+    '<b style="display:block;margin-top:12px">直らなくても大丈夫</b>'+
+    '読み上げが使えない端末では、音が手がかりの問題を自動で出さないようにしてあります。絵・英語・日本語の問題だけで学習は続けられます。'+
+    '</div>';
 }
 $("#se-rate").oninput=e=>{S.set.rate=+e.target.value;save()};
 $("#se-rate").onchange=()=>speak("Nice shot!");
