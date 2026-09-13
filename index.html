@@ -231,11 +231,13 @@ h2.sec{font-size:12px;letter-spacing:.18em;color:var(--muted);margin:22px 0 8px;
   font-size:24px;opacity:.28;position:relative}
 .bg.got{opacity:1;background:linear-gradient(160deg,#2a5a6c,#14313d);border-color:var(--gold)}
 .bg small{position:absolute;bottom:4px;font-size:8px;color:var(--muted);letter-spacing:.02em}
-.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:10px 12px;padding:13px 0;
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
 .setrow:last-child{border-bottom:0}
-.setrow label{font-size:14px}
-.seg{display:flex;gap:6px}
-.seg button{padding:8px 12px;border-radius:10px;background:#0e2731;border:1px solid var(--line);font-size:13px}
+.setrow label{font-size:14px;white-space:nowrap}
+.seg{display:flex;gap:6px;margin-left:auto}
+.seg button{padding:8px 12px;border-radius:10px;background:#0e2731;border:1px solid var(--line);
+  font-size:13px;white-space:nowrap}
 .seg button.on{background:var(--gold);color:#241800}
 input[type=range]{width:130px;accent-color:var(--accent)}
 .foot{margin-top:22px;text-align:center;font-size:11px;color:var(--muted);line-height:1.7}
@@ -250,6 +252,25 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 .howto b{color:var(--flood)}
 .howto ol{margin:8px 0 0;padding-left:1.2em}
 .howto li{margin-bottom:5px}
+
+/* ---------- grade picker ---------- */
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gbtn{padding:14px 6px;border-radius:15px;background:#0e2731;border:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;gap:4px;transition:background .15s}
+.gbtn .ge{font-size:26px}
+.gbtn .gn{font-size:17px}
+.gbtn.on{background:linear-gradient(180deg,#FFD469,#F0A916);color:#241800;border-color:var(--gold)}
+.gdesc{margin-top:12px;font-size:12px;font-weight:400;line-height:1.75;color:var(--muted)}
+.gdesc b{color:var(--flood)}
+.gstat{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+  border-radius:12px;overflow:hidden}
+.gstat div{background:var(--card);padding:10px 8px;text-align:center}
+.gstat span{display:block;font-size:10px;color:var(--muted);letter-spacing:.08em}
+.gstat b{font-family:var(--en);font-size:19px}
+.gnote{margin-top:10px;font-size:11px;font-weight:400;line-height:1.7;color:var(--muted);
+  border-top:1px solid var(--line);padding-top:10px}
+.wrow .gt{font-size:9px;color:var(--muted);border:1px solid var(--line);border-radius:5px;
+  padding:1px 4px;margin-left:6px;letter-spacing:.04em}
 
 /* ---------- speaking ---------- */
 .tile.speak .ic{background:linear-gradient(160deg,#3a2a5e,#20304a)}
@@ -421,6 +442,9 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 
   <!-- ================= SETTINGS ================= -->
   <section id="s-set" class="hidden">
+    <h2 class="sec">がくねん（むずかしさ）</h2>
+    <div class="card" id="se-grade"></div>
+
     <h2 class="sec">せってい</h2>
     <div class="card">
       <div class="setrow"><label>読み上げのはやさ</label><input type="range" id="se-rate" min="60" max="120" step="5"></div>
@@ -460,7 +484,9 @@ const CATS = [
   ["day","ようび","📅"],["month","つき","🗓️"],["sport","スポーツ","🏅"],["verb","どうさ","🏃"],
   ["feeling","きもち","😄"],["weather","てんき","☀️"],["place","ばしょ","🏙️"],["vehicle","のりもの","🚃"],
   ["adj","ようす","✨"],["phrase","フレーズ","💬"],["idiom","じゅくご","🔑"],
-  ["greet","あいさつ","👋"],["talk","おしゃべり","🗣️"],["out","おでかけ","🗺️"],["help","こまったとき","🆘"]
+  ["greet","あいさつ","👋"],["talk","おしゃべり","🗣️"],["out","おでかけ","🗺️"],["help","こまったとき","🆘"],
+  ["job","しょくぎょう","👩‍⚕️"],["country","くに","🌍"],["past","かこのこと","⏮️"],
+  ["dream","ゆめ・これから","🌟"],["compare","くらべる","⚖️"]
 ];
 const RAW = [
 /* soccer */
@@ -714,10 +740,88 @@ const RAW = [
 ["Can you say that again?","もう1回 言ってくれる？","🔁","help",2],
 ["I don't understand.","わかりません。","😕","help",1],
 ["How do you say this in English?","これ 英語で なんて言うの？","🔤","help",3],
-["Sorry, my mistake.","ごめん、ぼくのミス。","🙏","help",2]
+["Sorry, my mistake.","ごめん、ぼくのミス。","🙏","help",2],
+/* ===== 小6レベル：しょくぎょう ===== */
+["soccer player","サッカーせんしゅ","⚽","job",2],
+["doctor","いしゃ","🩺","job",3],
+["nurse","かんごし","👩‍⚕️","job",3],
+["vet","じゅうい","🐕","job",3],
+["baker","パンやさん","🥐","job",3],
+["farmer","のうか","🌾","job",3],
+["singer","かしゅ","🎤","job",3],
+["artist","がか・アーティスト","🎨","job",3],
+["astronaut","うちゅうひこうし","🚀","job",3],
+["police officer","けいさつかん","👮","job",3],
+["firefighter","しょうぼうし","🚒","job",3],
+["pilot","パイロット","✈️","job",3],
+["scientist","かがくしゃ","🔬","job",3],
+["programmer","プログラマー","💻","job",3],
+/* ===== 小6レベル：くに ===== */
+["Japan","にほん","🇯🇵","country",2],
+["America","アメリカ","🇺🇸","country",2],
+["Brazil","ブラジル","🇧🇷","country",2],
+["Argentina","アルゼンチン","🇦🇷","country",3],
+["Italy","イタリア","🇮🇹","country",3],
+["France","フランス","🇫🇷","country",3],
+["Spain","スペイン","🇪🇸","country",3],
+["Germany","ドイツ","🇩🇪","country",3],
+["Australia","オーストラリア","🇦🇺","country",3],
+["Kenya","ケニア","🇰🇪","country",3],
+["India","インド","🇮🇳","country",3],
+["Egypt","エジプト","🇪🇬","country",3],
+["China","ちゅうごく","🇨🇳","country",3],
+["Korea","かんこく","🇰🇷","country",3],
+/* ===== 小6レベル：かこのこと（過去形） ===== */
+["I went to the sea.","海へ行きました。","🌊","past",3],
+["I ate shaved ice.","かき氷を食べました。","🍧","past",3],
+["It was fun.","楽しかったです。","😄","past",3],
+["It was delicious.","おいしかったです。","😋","past",3],
+["I enjoyed summer vacation.","夏休みを楽しみました。","☀️","past",3],
+["I played soccer with my friends.","友だちとサッカーをしました。","⚽","past",3],
+["I saw a soccer game.","サッカーの試合を見ました。","🏟️","past",3],
+["I watched TV last night.","昨夜テレビを見ました。","📺","past",3],
+["My best memory is our school trip.","一番の思い出は修学旅行です。","🚌","past",3],
+["I was very tired.","とてもつかれました。","😮‍💨","past",3],
+["We won the game.","試合に勝ちました。","🏆","past",3],
+["We lost the game.","試合に負けました。","😢","past",3],
+["I got up at six.","6時に起きました。","⏰","past",3],
+["I had curry for dinner.","夕食にカレーを食べました。","🍛","past",3],
+["I went to Okinawa.","沖縄へ行きました。","🏝️","past",3],
+["It was a great day.","すばらしい1日でした。","🌈","past",3],
+["I practiced every day.","毎日練習しました。","🔁","past",3],
+["I scored a goal.","ゴールを決めました。","🥅","past",3],
+["Where did you go?","どこへ行きましたか。","❓","past",3],
+["How was it?","どうでしたか。","🤔","past",3],
+/* ===== 小6レベル：ゆめ・これから ===== */
+["What do you want to be?","何になりたいですか。","🤔","dream",3],
+["I want to join the soccer team.","サッカー部に入りたいです。","⚽","dream",3],
+["I want to go to Spain.","スペインへ行きたいです。","🇪🇸","dream",3],
+["I want to study English.","英語を勉強したいです。","📚","dream",3],
+["My dream is to play in the World Cup.","夢はワールドカップでプレーすることです。","🌍","dream",3],
+["I'm good at running.","走るのが得意です。","🏃","dream",3],
+["I'm not good at math.","算数が得意ではありません。","➗","dream",3],
+["I want to help people.","人を助けたいです。","🤝","dream",3],
+["I can do it.","ぼくならできる。","💪","dream",2],
+["I will practice harder.","もっと練習します。","🔥","dream",3],
+["What club do you want to join?","何部に入りたいですか。","🏫","dream",3],
+["I want to try new things.","新しいことに挑戦したいです。","✨","dream",3],
+["I want to see the world.","世界を見てみたいです。","🌏","dream",3],
+["Let's do our best.","がんばろう。","🙌","dream",2],
+["Dreams come true.","夢はかなう。","🌟","dream",3],
+/* ===== 小6レベル：くらべる（比較） ===== */
+["I'm faster than you.","ぼくは君より速いよ。","💨","compare",3],
+["He is taller than me.","彼はぼくより背が高い。","📏","compare",3],
+["Soccer is more popular than tennis.","サッカーはテニスより人気があります。","⚽","compare",3],
+["This is the best game.","これが一番いい試合です。","🏆","compare",3],
+["She is the fastest in my class.","彼女はクラスで一番速い。","🥇","compare",3],
+["Which do you like better?","どちらが好きですか。","⚖️","compare",3],
+["I like summer better than winter.","冬より夏が好きです。","☀️","compare",3],
+["It's the biggest stadium in Japan.","日本で一番大きいスタジアムです。","🏟️","compare",3],
+["My bag is bigger than yours.","ぼくのかばんは君のより大きい。","🎒","compare",3],
+["This one is easier.","こっちのほうが簡単です。","👌","compare",3]
 ];
 
-const PHRASE_CATS=["phrase","greet","talk","out","help"];
+const PHRASE_CATS=["phrase","greet","talk","out","help","past","dream","compare"];
 const ITEMS = RAW.map((r,i)=>({id:i,w:r[0],j:r[1],e:r[2],c:r[3],lv:r[4],
   isP:PHRASE_CATS.indexOf(r[3])>=0, chunks:r[0].split(" ")}));
 const BY_CAT={}; ITEMS.forEach(it=>{(BY_CAT[it.c]=BY_CAT[it.c]||[]).push(it)});
@@ -727,10 +831,19 @@ const SPEAKABLE=ITEMS.filter(it=>it.isP||it.c==="idiom");
 /* コース：デイリーミッションの出題範囲 */
 const COURSES=[
   {k:"all",  n:"ぜんぶ",     e:"🌈", cats:null},
-  {k:"word", n:"きほん単語", e:"🔤", cats:["color","number","animal","food","school","body","family","day","month","verb","feeling","weather","place","vehicle","adj","sport"]},
-  {k:"daily",n:"日常会話",   e:"💬", cats:["greet","talk","out","help","phrase","idiom"]},
+  {k:"word", n:"きほん単語", e:"🔤", cats:["color","number","animal","food","school","body","family","day","month","verb","feeling","weather","place","vehicle","adj","sport","job","country"]},
+  {k:"daily",n:"日常会話",   e:"💬", cats:["greet","talk","out","help","phrase","idiom","past","dream","compare"]},
   {k:"soc",  n:"サッカー",   e:"⚽", cats:["soccer","sport"]}
 ];
+
+/* がくねん（むずかしさ）。lv1=小4 / lv2=小5 / lv3=小6 に対応 */
+const GRADES=[
+  {k:4,n:"小4",e:"🐣",max:1,d:"みじかい単語とあいさつ中心。絵で答える問題を多めに。"},
+  {k:5,n:"小5",e:"⚽",max:2,d:"小5の教科書レベル。単語も会話文もバランスよく。"},
+  {k:6,n:"小6",e:"🔥",max:3,d:"小6〜中1の入口。過去形・将来の夢・くらべる表現まで。"}
+];
+function gradeOf(){return GRADES.find(g=>g.k===S.set.grade)||GRADES[1]}
+function gradeTag(lv){return lv===1?"小4":lv===2?"小5":"小6"}
 
 /* =========================================================
    プレーヤーカード
@@ -820,7 +933,7 @@ const INTERVALS=[0,1,2,4,8,16,32,60];
 const KEY="soccer-english-v1";
 const DEF={xp:0,streak:0,best:0,last:"",days:{},goals:0,shots:0,bestCombo:0,
            srs:{},badges:{},cards:{},spoke:0,
-           set:{rate:85,sfx:1,qn:12,tts:"auto",course:"all"}};
+           set:{rate:85,sfx:1,qn:12,tts:"auto",course:"all",grade:5}};
 let S=load();
 function load(){try{const r=localStorage.getItem(KEY);if(!r)return JSON.parse(JSON.stringify(DEF));
   const o=JSON.parse(r);return Object.assign(JSON.parse(JSON.stringify(DEF)),o,{set:Object.assign({},DEF.set,o.set||{})});
@@ -937,9 +1050,10 @@ function renderHome(){
   const doneToday=!!S.days[today()];
   $("#h-done").classList.toggle("hidden",!doneToday);
   $("#h-title").textContent=doneToday?"ONE MORE GAME":"KICK OFF";
+  const gr=gradeOf();
   $("#h-sub").textContent=doneToday
-    ? "今日はもう1試合できる。コンボをのばそう。"
-    : "1試合 "+S.set.qn+"問・約10分。ゴールを決めて単語をチームに入れよう。";
+    ? gr.e+" "+gr.n+"レベル ・ 今日はもう1試合できる。コンボをのばそう。"
+    : gr.e+" "+gr.n+"レベル ・ 1試合 "+S.set.qn+"問 約10分。ゴールを決めて単語をチームに入れよう。";
   const names=["日","月","火","水","木","金","土"];
   $("#h-week").innerHTML=[6,5,4,3,2,1,0].map(o=>{
     const ds=dayStr(-o),d=new Date();d.setDate(d.getDate()-o);
@@ -954,6 +1068,7 @@ function renderHome(){
   [].forEach.call($("#h-courses").children,b=>b.onclick=()=>{
     S.set.course=b.dataset.k;save();sfx("tap");renderHome();
   });
+  renderGrade();  /* コース変更で語数表示が変わるため一緒に更新 */
   refreshTts();   /* 読み上げ警告バナーの出し入れはここに集約 */
 }
 
@@ -969,10 +1084,13 @@ function buildQueue(n,onlyWeak){
   if(onlyWeak){
     const pool=weakItems().slice();shuffle(pool);return pool.slice(0,Math.min(n,pool.length));
   }
-  const base=coursePool();
+  const base=coursePool(),max=gradeOf().max;
+  /* 復習は学年で絞らない。一度おぼえた語はレベルを下げても出しつづける */
   const due=base.filter(it=>{const r=S.srs[it.w];return r&&r.due<=t});
   due.sort((a,b)=>(S.srs[a.w].b-S.srs[b.w].b)||(S.srs[a.w].due<S.srs[b.w].due?-1:1));
-  const fresh=base.filter(it=>!S.srs[it.w]).sort((a,b)=>a.lv-b.lv);
+  /* 新しく出す語だけを学年でしぼる */
+  let fresh=base.filter(it=>!S.srs[it.w]&&it.lv<=max).sort((a,b)=>a.lv-b.lv);
+  if(!fresh.length)fresh=base.filter(it=>!S.srs[it.w]).sort((a,b)=>a.lv-b.lv);
   const q=[];
   const newCap=Math.max(3,Math.round(n*0.4));
   for(let i=0;i<due.length&&q.length<n-Math.min(newCap,fresh.length);i++)q.push(due[i]);
@@ -984,16 +1102,21 @@ function buildQueue(n,onlyWeak){
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
 
 function modeFor(it){
-  const b=box(it),tts=ttsUsable();
+  const b=box(it),tts=ttsUsable(),g=S.set.grade;
   if(it.isP){
-    if(b>=1&&it.chunks.length>=3&&it.chunks.length<=6&&Math.random()<.55)return "order";
+    /* 並べかえは学年が上がるほど多く、扱える文も長くする */
+    const orderP=g<=4?.30:g===5?.45:.60, maxChunk=g<=4?5:g===5?6:8;
+    if(b>=1&&it.chunks.length>=3&&it.chunks.length<=maxChunk&&Math.random()<orderP)return "order";
     return (tts&&Math.random()<.5)?"listen":"en2ja";
   }
   const r=Math.random();
   if(b<0)return (tts&&r>=.6)?"listen":"en2ja";   /* first meeting: show the word */
-  if(it.e&&r<.22)return "emoji";
-  if(r<.5)return tts?"listen":"ja2en";           /* 音が使えない端末は日本語→英語で代替 */
-  if(r<.78)return "en2ja";
+  /* 小4は絵で答える問題を多く、小6は日本語→英語（思い出す側）を多く */
+  const emojiP=g<=4?.34:g===5?.22:.12;
+  const recogCut=g<=4?.92:g===5?.78:.60;
+  if(it.e&&r<emojiP)return "emoji";
+  if(r<.5)return tts?"listen":(g<=4?"en2ja":"ja2en");  /* 音が使えない端末の代替 */
+  if(r<recogCut)return "en2ja";
   return "ja2en";
 }
 function distractors(it,k){
@@ -1248,9 +1371,11 @@ function speakScore(said,target){
 let SP=null,rec=null;
 function startSpeak(){
   const pool=SPEAKABLE.slice();
-  /* コースが選ばれていれば、その範囲の文を優先 */
-  const c=courseOf();
+  /* コースと学年の範囲の文を優先。足りなければ順に条件をゆるめる */
+  const c=courseOf(),max=gradeOf().max;
   let use=c.cats?pool.filter(it=>c.cats.indexOf(it.c)>=0):pool;
+  const byGrade=use.filter(it=>it.lv<=max);
+  if(byGrade.length>=8)use=byGrade;
   if(use.length<8)use=pool;
   shuffle(use);
   SP={queue:use.slice(0,8),i:0,stars:0,xp:0,tries:0,best:[]};
@@ -1481,7 +1606,8 @@ function renderBook(){
   $("#bk-list").innerHTML=list.map(it=>{
     const b=box(it),stars=b<0?"・・・":b>=6?"★★★":b>=4?"★★☆":b>=2?"★☆☆":"☆☆☆";
     return '<button class="wrow" data-w="'+esc(it.w)+'"><span class="e">'+(it.e||"🔤")+'</span>'+
-      '<span><span class="w">'+esc(it.w)+'</span><span class="j">'+esc(it.j)+'</span></span>'+
+      '<span><span class="w">'+esc(it.w)+'<span class="gt">'+gradeTag(it.lv)+'</span></span>'+
+      '<span class="j">'+esc(it.j)+'</span></span>'+
       '<span class="st">'+stars+'</span></button>';
   }).join("");
   [].forEach.call($("#bk-list").children,b=>b.onclick=()=>{sfx("tap");speak(b.dataset.w)});
@@ -1504,7 +1630,28 @@ function renderStats(){
 }
 
 /* ========================= SETTINGS ========================= */
+function renderGrade(){
+  const el=$("#se-grade");if(!el)return;
+  const g=gradeOf(),pool=coursePool();
+  const inRange=pool.filter(it=>it.lv<=g.max).length;
+  const learned=pool.filter(it=>S.srs[it.w]).length;
+  el.innerHTML='<div class="grades">'+GRADES.map(x=>
+      '<button class="gbtn'+(x.k===S.set.grade?" on":"")+'" data-g="'+x.k+'">'+
+      '<span class="ge">'+x.e+'</span><span class="gn">'+x.n+'</span></button>').join("")+'</div>'+
+    '<div class="gdesc"><b>'+g.n+'</b>：'+esc(g.d)+'</div>'+
+    '<div class="gstat">'+
+      '<div><span>いま出る単語</span><b>'+inRange+'</b></div>'+
+      '<div><span>もう出会った語</span><b>'+learned+'</b></div>'+
+    '</div>'+
+    '<div class="gnote">・数は、いま選んでいるコース「'+esc(courseOf().n)+'」の中の語数です。<br>'+
+    '・一度おぼえた単語は、学年を下げても復習に出ます。むずかしすぎたら下げて大丈夫。<br>'+
+    '・学年を上げると、日本語→英語や ならべかえ など「思い出す」問題が増えます。</div>';
+  [].forEach.call(el.querySelectorAll(".gbtn"),b=>b.onclick=()=>{
+    S.set.grade=+b.dataset.g;save();sfx("tap");renderGrade();renderHome();
+  });
+}
 function renderSet(){
+  renderGrade();
   $("#se-rate").value=S.set.rate;
   $("#se-qn").innerHTML=[8,12,16].map(n=>'<button data-n="'+n+'" class="'+(S.set.qn===n?"on":"")+'">'+n+'問</button>').join("");
   [].forEach.call($("#se-qn").children,b=>b.onclick=()=>{S.set.qn=+b.dataset.n;save();renderSet()});
