@@ -1316,7 +1316,7 @@ function ballSweep(){
   document.body.appendChild(b);
   setTimeout(()=>b.remove(),820);
 }
-let lastScreen="";
+let lastScreen="s-home";   /* 起動時はホームが出ているので、最初の遷移から演出する */
 function show(id){
   if(lastScreen&&lastScreen!==id){ballSweep();sfx("pip")}
   lastScreen=id;
