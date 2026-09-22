@@ -293,12 +293,59 @@ input[type=range]{width:130px;accent-color:var(--accent)}
   display:flex;flex-direction:column;gap:4px;min-height:112px;position:relative;overflow:hidden}
 .pcard.got{background:linear-gradient(155deg,#27506a,#152f3c);border-color:var(--gold)}
 .pcard.locked{opacity:.45}
-.pcard .fl{font-size:24px}
-.pcard .nm{font-size:13px;line-height:1.3}
-.pcard .ps{font-size:10px;color:var(--muted);letter-spacing:.08em}
-.pcard .lk{font-size:10px;color:var(--muted);font-weight:400;line-height:1.4}
-.tierbar{position:absolute;top:0;left:0;right:0;height:3px}
+.pcard .pic{position:relative;width:100%;aspect-ratio:1/1;border-radius:11px;overflow:hidden;background:#0b1b24;display:block}
+.pcard .pic img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block}
+.pcard .pic img.silh{filter:brightness(.16) grayscale(1) contrast(1.6)}
+.pcard .pic .lock{position:absolute;inset:0;display:grid;place-items:center;font-size:24px;opacity:.85}
+.pcard .nm{font-size:12px;line-height:1.3}
+.pcard .ps{font-size:9.5px;color:var(--muted);letter-spacing:.04em;line-height:1.4}
+.pcard.locked{opacity:.75}
+.tierbar{position:absolute;top:0;left:0;right:0;height:3px;z-index:2}
 .t1{background:#6FD3FF}.t2{background:var(--good)}.t3{background:var(--accent)}.t4{background:var(--gold)}
+
+.nextcard{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);
+  border-radius:16px;padding:12px;margin-bottom:12px}
+.nextcard.done{justify-content:center;font-size:14px;color:var(--gold)}
+.nextcard img{width:54px;height:54px;border-radius:12px;object-fit:cover;object-position:center 15%;flex:none}
+.nextcard img.silh{filter:brightness(.18) grayscale(1) contrast(1.6)}
+.nextcard span{display:block;font-size:10px;color:var(--muted);letter-spacing:.08em}
+.nextcard b{display:block;font-size:14px;margin-top:2px}
+.nextcard small{font-family:var(--en);font-size:11px;color:var(--muted)}
+.pbar{height:7px;border-radius:99px;background:#0a1b23;border:1px solid var(--line);overflow:hidden;margin:6px 0 3px}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--accent))}
+
+.crrow{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:9px;margin-top:8px;text-decoration:none;color:inherit}
+.crrow img{width:38px;height:38px;border-radius:9px;object-fit:cover;object-position:center 15%;flex:none}
+.crrow b{display:block;font-family:var(--en);font-size:13px}
+.crrow i{display:block;font-style:normal;font-size:11px;color:var(--muted);font-weight:400}
+.crrow em{display:block;font-style:normal;font-size:10px;color:var(--gold);font-weight:400}
+
+/* ---------- サッカー感の演出 ---------- */
+#kickball{position:fixed;z-index:60;font-size:44px;pointer-events:none;left:-70px;top:45%;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
+@keyframes flyby{
+  0%{transform:translate(0,40vh) rotate(0deg) scale(.5);opacity:0}
+  12%{opacity:1}
+  100%{transform:translate(118vw,-18vh) rotate(1080deg) scale(1.15);opacity:0}}
+#cheerin{position:fixed;left:10px;right:10px;bottom:18px;z-index:35;display:flex;gap:11px;align-items:center;
+  background:linear-gradient(120deg,#23506a,#13303d);border:2px solid var(--gold);border-radius:18px;
+  padding:10px 13px;box-shadow:0 14px 34px rgba(0,0,0,.6);max-width:440px;margin:0 auto;
+  animation:cheerup .45s cubic-bezier(.2,1.3,.4,1)}
+@keyframes cheerup{from{transform:translateY(130%);opacity:0}to{transform:translateY(0);opacity:1}}
+#cheerin img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:center 12%;
+  border:2px solid var(--gold);flex:none}
+#cheerin .tx{min-width:0}
+#cheerin .who{font-size:10px;color:var(--gold);letter-spacing:.06em}
+#cheerin .msg{font-family:var(--en);font-size:17px;line-height:1.2;margin-top:2px}
+#cheerin .msgj{font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
+.coachbox{display:flex;gap:11px;align-items:center;text-align:left;background:rgba(0,0,0,.3);
+  border:1px solid var(--gold);border-radius:14px;padding:10px;margin-bottom:14px}
+.coachbox img{width:50px;height:50px;border-radius:50%;object-fit:cover;object-position:center 12%;
+  border:2px solid var(--gold);flex:none}
+.coachbox span{display:block;font-size:10px;color:var(--gold)}
+.coachbox b{display:block;font-family:var(--en);font-size:16px;line-height:1.2;margin-top:2px}
+.coachbox i{display:block;font-style:normal;font-size:11px;color:var(--muted);font-weight:400}
 
 #reveal{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:20px;
   background:radial-gradient(circle at 50% 35%,rgba(255,197,61,.18),rgba(6,16,22,.94) 60%);backdrop-filter:blur(4px)}
@@ -309,10 +356,15 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 .bigcard::before{content:"";position:absolute;top:-60%;left:-30%;width:60%;height:220%;transform:rotate(18deg);
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);animation:shine 2.4s ease-in-out infinite}
 @keyframes shine{0%{left:-40%}60%,100%{left:120%}}
-.bigcard .kicker{font-size:11px;letter-spacing:.2em;color:var(--gold)}
-.bigcard .fl{font-size:52px;line-height:1.1;margin-top:6px}
-.bigcard .nm{font-size:20px;margin-top:4px}
-.bigcard .en{font-family:var(--en);font-size:13px;color:var(--muted);margin-top:2px}
+.bigcard .photo{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:#0b1b24}
+.bigcard .photo img{width:100%;height:100%;object-fit:cover;object-position:center 18%;display:block}
+.bigcard .photo .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(6,16,22,.92))}
+.bigcard .photo .pname{position:absolute;left:12px;right:12px;bottom:10px;text-align:left}
+.bigcard .photo .pname b{display:block;font-size:19px;line-height:1.25;text-shadow:0 2px 6px rgba(0,0,0,.8)}
+.bigcard .photo .pname i{display:block;font-family:var(--en);font-style:normal;font-size:12px;color:var(--gold)}
+.bigcard .photo .tier{position:absolute;top:10px;right:10px;font-family:var(--en);font-size:12px;
+  padding:3px 9px;border-radius:99px;color:#12232b}
+.bigcard .credit{margin-top:10px;font-size:10px;font-weight:400;color:var(--muted);line-height:1.5}
 .bigcard .meta{display:flex;gap:8px;justify-content:center;margin-top:10px}
 .bigcard .meta span{font-size:11px;background:rgba(0,0,0,.3);border:1px solid var(--line);padding:4px 10px;border-radius:99px}
 .bigcard .fact{font-size:12px;font-weight:400;line-height:1.7;margin-top:12px;text-align:left;
@@ -408,8 +460,24 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 
   <!-- ================= CARDS ================= -->
   <section id="s-cards" class="hidden">
-    <h2 class="sec">プレーヤーカード</h2>
+    <h2 class="sec">プレーヤーカード <span id="cd-head" style="color:var(--gold)"></span></h2>
+    <div id="cd-next"></div>
     <div class="cardgrid" id="cd-grid"></div>
+    <div class="btnrow">
+      <button class="btn ghost" id="b-credits">写真のクレジット</button>
+      <button class="btn ghost" data-home>ホームへもどる</button>
+    </div>
+  </section>
+
+  <!-- ================= CREDITS ================= -->
+  <section id="s-credits" class="hidden">
+    <h2 class="sec">写真のクレジット</h2>
+    <div class="card" style="font-size:12px;font-weight:400;line-height:1.8;color:var(--muted)">
+      選手の写真は <b style="color:var(--flood)">Wikimedia Commons</b> の、再利用が許可されたライセンス
+      （CC BY / CC BY-SA / CC0 / パブリックドメイン）の画像のみを使用しています。
+      各画像の権利は撮影者に帰属し、元のライセンスがそのまま適用されます。
+    </div>
+    <div id="cr-list"></div>
     <div class="btnrow"><button class="btn ghost" data-home>ホームへもどる</button></div>
   </section>
 
@@ -850,71 +918,233 @@ function gradeTag(lv){return lv===1?"小4":lv===2?"小5":"小6"}
    注意：cheer は「その選手の発言」ではなく、アプリからの応援フレーズ。
    fact は実際の経歴のみを書く。learn はその選手の姿勢から学べること。
    ========================================================= */
+const PHOTO_CREDITS=[{k:"messi",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ALeo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg"},
+ {k:"cr7",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ACristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg"},
+ {k:"mbappe",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AKylian_Mbappe_France_v_Senegal_16_June_2026-391_(cropped).jpg"},
+ {k:"haaland",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AErling_Haaland_Morocco_v_Norway_7_June_2026-51.jpg"},
+ {k:"ronaldinho",a:"Marcos Corrêa/PR",l:"CC BY 2.0",u:"https://commons.wikimedia.org/wiki/File%3ARonaldinho_in_2019.jpg"},
+ {k:"neymar",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ANeymar_Junior_Brazil_V_Morocco_13_June_2026-40.jpg"},
+ {k:"debruyne",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AKevin_De_Bruyne_USMNT_v_Belgium_Mar_28_2026-64_(cropped).jpg"},
+ {k:"modric",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ALuka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg"},
+ {k:"bellingham",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AJude_Bellingham_England_v_Ghana_23_June_2026-061_(cropped).jpg"},
+ {k:"vinicius",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AVin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207_(cropped).jpg"},
+ {k:"zidane",a:"Hadi Abyar",l:"CC BY 4.0",u:"https://commons.wikimedia.org/wiki/File%3AZinedine_Zidane_by_Tasnim_03.jpg"},
+ {k:"maradona",a:"Unknown authorUnknown author",l:"Public domain",u:"https://commons.wikimedia.org/wiki/File%3AArgentina_celebrando_copa_(cropped).jpg"},
+ {k:"pele",a:"Unknown authorUnknown author",l:"Public domain",u:"https://commons.wikimedia.org/wiki/File%3APele_con_brasil_(cropped).jpg"},
+ {k:"mitoma",a:"Timmy96",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AKaoru_Mitoma_2026.jpg"},
+ {k:"kubo",a:"Real Madrid",l:"CC BY 3.0",u:"https://commons.wikimedia.org/wiki/File%3ATakefusa_Kubo_2019.png"},
+ {k:"sawa",a:"GoToVan from Vancouver, Canada",l:"CC BY 2.0",u:"https://commons.wikimedia.org/wiki/File%3AHomare_Sawa_2015_(cropped).jpg"},
+ {k:"kane",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AHarry_Kane_England_v_Ghana_23_June_2026-219_(cropped).jpg"},
+ {k:"lewandowski",a:"Sven Mandel",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3A2019147183134_2019-05-27_Fussball_1.FC_Kaiserslautern_vs_FC_Bayern_M%C3%BCnchen_-_Sven_-_1D_X_MK_II_-_0228_-_B70I8527_(cropped).jpg"},
+ {k:"son",a:"Ujishadow",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ABFA_2023_-2_Heung-Min_Son_(cropped).jpg"},
+ {k:"salah",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AMohamed_Salah_Argentina_v_Egypt_7_July_2026-163_(cropped).jpg"},
+ {k:"mane",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ASadio_Mane_France_v_Senegal_16_June_2026-450.jpg"},
+ {k:"vandijk",a:"Ailura",l:"CC BY-SA 3.0 at",u:"https://commons.wikimedia.org/wiki/File%3A20160604_AUT_NED_8876_(cropped).jpg"},
+ {k:"neuer",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AManuel_Neuer_Ecuador_v_Germany_25_June_2026-148.jpg"},
+ {k:"courtois",a:"Кирилл Венедиктов",l:"CC BY-SA 3.0",u:"https://commons.wikimedia.org/wiki/File%3AThibaut_Courtois_at_the_2018_World_Cup_(cropped).jpg"},
+ {k:"rodri",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ARodri_Argentina_v_Spain_19_July_2026-187_(cropped).jpg"},
+ {k:"pedri",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3APedri_France_v_Spain_7.24.26-245.jpg"},
+ {k:"yamal",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ALamine_Yamal_France_v_Spain_7.24.26-142.jpg"},
+ {k:"musiala",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AJamal_Musiala_Ecuador_v_Germany_25_June_2026-174_(cropped).jpg"},
+ {k:"valverde",a:"Real Madrid",l:"CC BY 3.0",u:"https://commons.wikimedia.org/wiki/File%3AFederico_Valverde_2021_(cropped).jpg"},
+ {k:"alvarez",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AJulian_Alvarez_Argentina_v_Spain_19_July_2026-052_(cropped).jpg"},
+ {k:"osimhen",a:"Fédération Guinéenne Football",l:"Public domain",u:"https://commons.wikimedia.org/wiki/File%3AVictor-osimhen-nigeria-2024-3-4.jpg"},
+ {k:"hakimi",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AAchraf_Hakimi_Morocco_v_Norway_7_June_2026-16.jpg"},
+ {k:"pulisic",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AChristian_Pulisic_USMNT_v_Belgium_Mar_28_2026-73_(cropped).jpg"},
+ {k:"davies",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AAlphonso_Davies_Canada_v_Qatar_18_June_2026-007_(cropped).jpg"},
+ {k:"tomiyasu",a:"Amir Ostovari",l:"CC BY 4.0",u:"https://commons.wikimedia.org/wiki/File%3ATakehiro_Tomiyasu%2C_2019_AFC_Asian_Cup_1.jpg"},
+ {k:"marta",a:"Hameltion",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ANC_Courage_vs_Orlando_Pride_(Jun_2024)_073_(cropped).jpg"},
+ {k:"bonmati",a:"Barcex",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3A25th_Laureus_World_Sports_Awards_-_240422_214032.jpg"},
+ {k:"iniesta",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3AAndr%C3%A9s_Iniesta_Argentina_v_Spain_19_July_2026-034_(cropped).jpg"},
+ {k:"beckham",a:"Soccer Aid for Unicef",l:"CC BY 3.0",u:"https://commons.wikimedia.org/wiki/File%3ADavid_Beckham_UNICEF_(cropped2).jpg"},
+ {k:"r9",a:"Lula Oficial",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3A12.12.2025_%E2%80%93_Cerim%C3%B4nia_de_lan%C3%A7amento_do_SBT_News_-_54980664160_(cropped2).jpg"},
+ {k:"cruyff",a:"Rob Mieremet / Anefo",l:"CC0",u:"https://commons.wikimedia.org/wiki/File%3AJohan_Cruijff_(1974).jpg"},
+ {k:"nakata",a:"norio nakayama",l:"CC BY-SA 2.0",u:"https://commons.wikimedia.org/wiki/File%3AHidetoshi_Nakata_in_Okinawa.jpg"},
+ {k:"honda",a:"Светлана Бекетова",l:"CC BY-SA 3.0",u:"https://commons.wikimedia.org/wiki/File%3AKeisuke_Honda_2018_(cropped)_(cropped).jpg"},
+ {k:"saka",a:"Bryan Berlin",l:"CC BY-SA 4.0",u:"https://commons.wikimedia.org/wiki/File%3ABukayo_Saka_England_v_Ghana_23_June_2026-057_(cropped).jpg"}];
+
 const PLAYERS=[
- {k:"messi",n:"リオネル・メッシ",en:"Lionel Messi",fl:"🇦🇷",pos:"FW",co:"アルゼンチン",
+/* ---- tier1：はじめの数週間で出会う ---- */
+ {k:"messi",n:"リオネル・メッシ",en:"Lionel Messi",fl:"🇦🇷",pos:"FW",co:"アルゼンチン",img:"messi.jpg",
   fact:"2022年ワールドカップ優勝。バロンドール受賞多数。左足のドリブルで世界の頂点に立った。",
   learn:"体が大きくなくても世界一になれる。武器は、毎日みがいた足もとの技術。",
-  cheer:"Small steps, big goals!",cheerJ:"小さな一歩が、大きなゴールに。",cond:"first",tier:1},
- {k:"mitoma",n:"三笘 薫",en:"Kaoru Mitoma",fl:"🇯🇵",pos:"FW",co:"日本",
-  fact:"日本代表。2022年ワールドカップのスペイン戦で、ゴールラインぎりぎりのボールを折り返しアシスト。",
-  learn:"大学までドリブルを研究し続けた努力の人。あきらめずに足をのばすと、とどく。",
-  cheer:"Never give up!",cheerJ:"ぜったいに あきらめるな！",cond:"s3",tier:1},
- {k:"kubo",n:"久保 建英",en:"Takefusa Kubo",fl:"🇯🇵",pos:"MF",co:"日本",
+  cheer:"Small steps, big goals!",cheerJ:"小さな一歩が、大きなゴールに。",req:["goals",1],tier:1},
+ {k:"mitoma",n:"三笘 薫",en:"Kaoru Mitoma",fl:"🇯🇵",pos:"FW",co:"日本",img:"mitoma.jpg",
+  fact:"日本代表。2022年ワールドカップのスペイン戦で、ゴールラインぎりぎりのボールを折り返しアシストした。",
+  learn:"大学までドリブルを研究しつづけた努力の人。あきらめずに足をのばすと、とどく。",
+  cheer:"Never give up!",cheerJ:"ぜったいに あきらめるな！",req:["streak",3],tier:1},
+ {k:"kubo",n:"久保 建英",en:"Takefusa Kubo",fl:"🇯🇵",pos:"MF",co:"日本",img:"kubo.png",
   fact:"日本代表。10代からスペインでプレーし、左足の技術と判断力で評価された。",
   learn:"言葉のちがう国でも、練習と言葉を覚えることでチームに入っていける。",
-  cheer:"Keep practicing!",cheerJ:"練習を つづけよう！",cond:"w20",tier:1},
- {k:"ronaldinho",n:"ロナウジーニョ",en:"Ronaldinho",fl:"🇧🇷",pos:"MF",co:"ブラジル",
+  cheer:"Keep practicing!",cheerJ:"練習を つづけよう！",req:["words",20],tier:1},
+ {k:"ronaldinho",n:"ロナウジーニョ",en:"Ronaldinho",fl:"🇧🇷",pos:"MF",co:"ブラジル",img:"ronaldinho.jpg",
   fact:"2002年ワールドカップ優勝、2005年バロンドール受賞。創造的なプレーと笑顔で知られた。",
   learn:"サッカーは楽しむもの。楽しんでいる人がいちばん伸びる。",
-  cheer:"Have fun!",cheerJ:"楽しもう！",cond:"combo10",tier:2},
- {k:"mbappe",n:"キリアン・エムバペ",en:"Kylian Mbappé",fl:"🇫🇷",pos:"FW",co:"フランス",
-  fact:"2018年ワールドカップ優勝。19歳で決勝戦にゴールを決めた。世界最速クラスのスピード。",
-  learn:"若さは弱点じゃない。今できることを全速力でやればいい。",
-  cheer:"Go for it!",cheerJ:"思いきって いけ！",cond:"g50",tier:2},
- {k:"haaland",n:"アーリング・ハーランド",en:"Erling Haaland",fl:"🇳🇴",pos:"FW",co:"ノルウェー",
-  fact:"ノルウェー代表のストライカー。ゴール前での強さと決定力で、驚異的な得点ペースを記録してきた。",
+  cheer:"Have fun!",cheerJ:"楽しもう！",req:["combo",10],tier:1},
+ {k:"son",n:"ソン・フンミン",en:"Son Heung-min",fl:"🇰🇷",pos:"FW",co:"かんこく",img:"son.jpg",
+  fact:"韓国代表のキャプテンを務めたエース。両足からシュートを打てる点取り屋。",
+  learn:"アジアから世界のトップへ。近くの国の選手が世界で戦えている。",
+  cheer:"You can do it, too!",cheerJ:"きみにも できる！",req:["level",3],tier:1},
+ {k:"yamal",n:"ラミン・ヤマル",en:"Lamine Yamal",fl:"🇪🇸",pos:"FW",co:"スペイン",img:"yamal.jpg",
+  fact:"スペイン代表。10代のうちから代表の主力としてプレーした若手。",
+  learn:"年れいは関係ない。今できることを、今の全力でやるだけ。",
+  cheer:"Start now!",cheerJ:"いま はじめよう！",req:["words",30],tier:1},
+ {k:"haaland",n:"アーリング・ハーランド",en:"Erling Haaland",fl:"🇳🇴",pos:"FW",co:"ノルウェー",img:"haaland.jpg",
+  fact:"ノルウェー代表のストライカー。ゴール前の強さと決定力で驚異的な得点ペースを記録してきた。",
   learn:"得意なことを1つ、とことん伸ばすと武器になる。",
-  cheer:"One more goal!",cheerJ:"もう1点 とろう！",cond:"g100",tier:2},
- {k:"modric",n:"ルカ・モドリッチ",en:"Luka Modrić",fl:"🇭🇷",pos:"MF",co:"クロアチア",
-  fact:"2018年バロンドール受賞。同年のワールドカップで小国クロアチアを準優勝に導いた。",
-  learn:"走る量と、まわりを見る目。はでじゃなくてもチームを動かせる。",
-  cheer:"Look around you!",cheerJ:"まわりを 見よう！",cond:"s7",tier:2},
- {k:"debruyne",n:"ケビン・デ・ブライネ",en:"Kevin De Bruyne",fl:"🇧🇪",pos:"MF",co:"ベルギー",
-  fact:"ベルギー代表。正確なパスとクロスでアシストを量産してきた司令塔。",
-  learn:"点を取る人だけが主役じゃない。人を生かす力も一流の武器。",
-  cheer:"Pass it on!",cheerJ:"つないで いこう！",cond:"lv5",tier:2},
- {k:"neymar",n:"ネイマール",en:"Neymar",fl:"🇧🇷",pos:"FW",co:"ブラジル",
-  fact:"ブラジル代表。ドリブルとテクニックで知られ、五輪では母国に金メダルをもたらした。",
-  learn:"うまくいかない日もある。それでも次の試合でまた仕掛ければいい。",
-  cheer:"Try again!",cheerJ:"もう1回 チャレンジ！",cond:"w50",tier:3},
- {k:"vinicius",n:"ヴィニシウス・ジュニオール",en:"Vinícius Júnior",fl:"🇧🇷",pos:"FW",co:"ブラジル",
+  cheer:"One more goal!",cheerJ:"もう1点 とろう！",req:["streak",5],tier:1},
+ {k:"mbappe",n:"キリアン・エムバペ",en:"Kylian Mbappé",fl:"🇫🇷",pos:"FW",co:"フランス",img:"mbappe.jpg",
+  fact:"2018年ワールドカップ優勝。19歳で決勝戦にゴールを決めた。世界最速クラスのスピードを持つ。",
+  learn:"若さは弱点じゃない。今できることを全速力でやればいい。",
+  cheer:"Go for it!",cheerJ:"思いきって いけ！",req:["goals",50],tier:1},
+/* ---- tier2 ---- */
+ {k:"salah",n:"モハメド・サラー",en:"Mohamed Salah",fl:"🇪🇬",pos:"FW",co:"エジプト",img:"salah.jpg",
+  fact:"エジプト代表。アフリカ最優秀選手に選ばれた、アフリカを代表するアタッカー。",
+  learn:"国や環境で決まらない。どこで生まれても、世界の舞台には立てる。",
+  cheer:"Believe and work!",cheerJ:"しんじて、やりつづけよう。",req:["level",5],tier:2},
+ {k:"vinicius",n:"ヴィニシウス・ジュニオール",en:"Vinícius Júnior",fl:"🇧🇷",pos:"FW",co:"ブラジル",img:"vinicius.jpg",
   fact:"ブラジル代表。左サイドからの突破で相手をはがし、大舞台で結果を出してきた。",
   learn:"最初は決められなくても、続けるうちに形になる。",
-  cheer:"Keep going!",cheerJ:"その調子で つづけよう！",cond:"lv10",tier:3},
- {k:"bellingham",n:"ジュード・ベリンガム",en:"Jude Bellingham",fl:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",pos:"MF",co:"イングランド",
+  cheer:"Keep going!",cheerJ:"その調子で つづけよう！",req:["streak",7],tier:2},
+ {k:"bellingham",n:"ジュード・ベリンガム",en:"Jude Bellingham",fl:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",pos:"MF",co:"イングランド",img:"bellingham.jpg",
   fact:"イングランド代表。10代のうちからトップクラブの中心選手として活躍した。",
   learn:"年下でも、声を出して走れば信頼される。",
-  cheer:"Believe in yourself!",cheerJ:"自分を しんじろう！",cond:"w100",tier:3},
- {k:"cr7",n:"クリスティアーノ・ロナウド",en:"Cristiano Ronaldo",fl:"🇵🇹",pos:"FW",co:"ポルトガル",
+  cheer:"Believe in yourself!",cheerJ:"自分を しんじろう！",req:["words",50],tier:2},
+ {k:"debruyne",n:"ケビン・デ・ブライネ",en:"Kevin De Bruyne",fl:"🇧🇪",pos:"MF",co:"ベルギー",img:"debruyne.jpg",
+  fact:"ベルギー代表。正確なパスとクロスでアシストを量産してきた司令塔。",
+  learn:"点を取る人だけが主役じゃない。人を生かす力も一流の武器。",
+  cheer:"Pass it on!",cheerJ:"つないで いこう！",req:["goals",100],tier:2},
+ {k:"pedri",n:"ペドリ",en:"Pedri",fl:"🇪🇸",pos:"MF",co:"スペイン",img:"pedri.jpg",
+  fact:"スペイン代表。若くして代表の中盤をになう、パスとポジショニングの名手。",
+  learn:"うまい人は、走る前に「どこに立つか」を考えている。",
+  cheer:"Think and move!",cheerJ:"考えて、うごこう。",req:["level",7],tier:2},
+ {k:"musiala",n:"ジャマル・ムシアラ",en:"Jamal Musiala",fl:"🇩🇪",pos:"MF",co:"ドイツ",img:"musiala.jpg",
+  fact:"ドイツ代表。せまい場所でもボールを失わない技巧派のアタッカー。",
+  learn:"人が多いところでも、力まかせじゃなく、落ち着きでぬけられる。",
+  cheer:"Stay cool!",cheerJ:"あわてないで いこう。",req:["streak",10],tier:2},
+ {k:"kane",n:"ハリー・ケイン",en:"Harry Kane",fl:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",pos:"FW",co:"イングランド",img:"kane.jpg",
+  fact:"イングランド代表の歴代最多得点記録を持つストライカー。パスの精度も高い。",
+  learn:"点を取る人が、いちばん味方を見ていることもある。",
+  cheer:"Look up!",cheerJ:"顔を上げて いこう！",req:["words",75],tier:2},
+ {k:"lewandowski",n:"ロベルト・レヴァンドフスキ",en:"Robert Lewandowski",fl:"🇵🇱",pos:"FW",co:"ポーランド",img:"lewandowski.jpg",
+  fact:"ポーランド代表の歴代最多得点記録を持つストライカー。30代でも得点を重ねつづけた。",
+  learn:"体のケアと基本の反復。長く続ける人がいちばん強い。",
+  cheer:"Every day counts!",cheerJ:"毎日が つみ重なる。",req:["goals",150],tier:2},
+ {k:"saka",n:"ブカヨ・サカ",en:"Bukayo Saka",fl:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",pos:"FW",co:"イングランド",img:"saka.jpg",
+  fact:"イングランド代表。右サイドの突破とゴールで、若くして代表に定着した。",
+  learn:"失敗した次の試合でまた立つ。それがいちばん強い。",
+  cheer:"Try again tomorrow!",cheerJ:"明日また やってみよう。",req:["streak",14],tier:2},
+ {k:"alvarez",n:"フリアン・アルバレス",en:"Julián Álvarez",fl:"🇦🇷",pos:"FW",co:"アルゼンチン",img:"alvarez.jpg",
+  fact:"アルゼンチン代表。2022年ワールドカップ優勝メンバーとして得点をあげた。",
+  learn:"スターの横でも、自分の仕事をきっちりやる人が信頼される。",
+  cheer:"Do your job well!",cheerJ:"自分の役目を きちんと。",req:["level",10],tier:2},
+/* ---- tier3 ---- */
+ {k:"modric",n:"ルカ・モドリッチ",en:"Luka Modrić",fl:"🇭🇷",pos:"MF",co:"クロアチア",img:"modric.jpg",
+  fact:"2018年バロンドール受賞。同年のワールドカップで小国クロアチアを準優勝に導いた。",
+  learn:"走る量と、まわりを見る目。はでじゃなくてもチームを動かせる。",
+  cheer:"Look around you!",cheerJ:"まわりを 見よう！",req:["words",100],tier:3},
+ {k:"neymar",n:"ネイマール",en:"Neymar",fl:"🇧🇷",pos:"FW",co:"ブラジル",img:"neymar.jpg",
+  fact:"ブラジル代表。ドリブルとテクニックで知られ、五輪では母国に金メダルをもたらした。",
+  learn:"うまくいかない日もある。それでも次の試合でまた仕掛ければいい。",
+  cheer:"Try again!",cheerJ:"もう1回 チャレンジ！",req:["goals",200],tier:3},
+ {k:"vandijk",n:"フィルジル・ファン・ダイク",en:"Virgil van Dijk",fl:"🇳🇱",pos:"DF",co:"オランダ",img:"vandijk.jpg",
+  fact:"オランダ代表のキャプテンを務めたセンターバック。競り合いと読みの強さで守備を支える。",
+  learn:"守る人がいるから、攻める人が思いきれる。目立たない仕事が土台になる。",
+  cheer:"Protect your team!",cheerJ:"仲間を まもろう。",req:["streak",21],tier:3},
+ {k:"hakimi",n:"アシュラフ・ハキミ",en:"Achraf Hakimi",fl:"🇲🇦",pos:"DF",co:"モロッコ",img:"hakimi.jpg",
+  fact:"モロッコ代表。2022年ワールドカップで、アフリカ勢初のベスト4進出を支えた。",
+  learn:"だれも予想しなかった結果は、走りきったチームが起こす。",
+  cheer:"Run to the end!",cheerJ:"最後まで 走ろう！",req:["level",12],tier:3},
+ {k:"osimhen",n:"ヴィクター・オシムヘン",en:"Victor Osimhen",fl:"🇳🇬",pos:"FW",co:"ナイジェリア",img:"osimhen.jpg",
+  fact:"ナイジェリア代表のストライカー。空中戦の強さとスピードを併せ持つ。",
+  learn:"苦しい時期を通った人ほど、チャンスをのがさない。",
+  cheer:"Fight for it!",cheerJ:"くらいついて いこう！",req:["words",125],tier:3},
+ {k:"mane",n:"サディオ・マネ",en:"Sadio Mané",fl:"🇸🇳",pos:"FW",co:"セネガル",img:"mane.jpg",
+  fact:"セネガル代表。アフリカネイションズカップ優勝に貢献し、アフリカ最優秀選手にも選ばれた。",
+  learn:"うまくなるほど、まわりの人を大切にできる。",
+  cheer:"Help each other!",cheerJ:"助け合って いこう。",req:["goals",300],tier:3},
+ {k:"davies",n:"アルフォンソ・デイビス",en:"Alphonso Davies",fl:"🇨🇦",pos:"DF",co:"カナダ",img:"davies.jpg",
+  fact:"カナダ代表。難民キャンプで生まれ、カナダへ渡り、世界のトップクラブでプレーするようになった。",
+  learn:"スタート地点は選べない。その先は、自分で選べる。",
+  cheer:"Keep moving forward!",cheerJ:"前へ 進みつづけよう。",req:["streak",30],tier:3},
+ {k:"valverde",n:"フェデリコ・バルベルデ",en:"Federico Valverde",fl:"🇺🇾",pos:"MF",co:"ウルグアイ",img:"valverde.jpg",
+  fact:"ウルグアイ代表。攻守に走りつづけ、強烈なミドルシュートも持つ中盤の選手。",
+  learn:"攻めも守りもやる人は、どのチームでも必要とされる。",
+  cheer:"Work both ways!",cheerJ:"攻めも 守りも！",req:["level",15],tier:3},
+ {k:"pulisic",n:"クリスティアン・プリシッチ",en:"Christian Pulisic",fl:"🇺🇸",pos:"FW",co:"アメリカ",img:"pulisic.jpg",
+  fact:"アメリカ代表の中心選手。10代でヨーロッパへ渡り、主力として活躍した。",
+  learn:"サッカーが一番人気じゃない国からでも、世界に出ていける。",
+  cheer:"Go your own way!",cheerJ:"自分の道を いこう。",req:["words",150],tier:3},
+ {k:"rodri",n:"ロドリ",en:"Rodri",fl:"🇪🇸",pos:"MF",co:"スペイン",img:"rodri.jpg",
+  fact:"スペイン代表。中盤の底からゲームを組み立て、EURO2024優勝に貢献した。",
+  learn:"はでなプレーより、ミスをしないこと。それがチームを勝たせる。",
+  cheer:"Keep it simple!",cheerJ:"シンプルに いこう。",req:["goals",400],tier:3},
+ {k:"neuer",n:"マヌエル・ノイアー",en:"Manuel Neuer",fl:"🇩🇪",pos:"GK",co:"ドイツ",img:"neuer.jpg",
+  fact:"ドイツ代表のゴールキーパー。2014年ワールドカップ優勝。ゴール前から飛び出す守り方で知られる。",
+  learn:"決まったやり方を疑うと、新しいプレーが生まれる。",
+  cheer:"Guard the goal!",cheerJ:"ゴールを まもれ！",req:["streak",45],tier:3},
+ {k:"courtois",n:"ティボー・クルトワ",en:"Thibaut Courtois",fl:"🇧🇪",pos:"GK",co:"ベルギー",img:"courtois.jpg",
+  fact:"ベルギー代表のゴールキーパー。大一番でのセーブ連発で試合を決めたことで知られる。",
+  learn:"1回の集中が試合を変える。声に出す練習も、その1回のため。",
+  cheer:"Save the day!",cheerJ:"ここぞで 集中！",req:["spoke",50],tier:3},
+/* ---- tier4：レジェンド ---- */
+ {k:"cr7",n:"クリスティアーノ・ロナウド",en:"Cristiano Ronaldo",fl:"🇵🇹",pos:"FW",co:"ポルトガル",img:"cr7.jpg",
   fact:"ポルトガル代表。EURO2016優勝。高いジャンプのヘディングと、練習量の多さで知られる。",
   learn:"才能より練習量。毎日つづけた人が最後に残る。",
-  cheer:"Work hard every day!",cheerJ:"毎日 こつこつ！",cond:"s30",tier:3},
- {k:"zidane",n:"ジネディーヌ・ジダン",en:"Zinédine Zidane",fl:"🇫🇷",pos:"MF",co:"フランス",
-  fact:"1998年ワールドカップ優勝、1998年バロンドール受賞。落ち着いたボールコントロールで知られた。",
-  learn:"あわてないこと。落ち着いている人のところに、ボールも答えも集まる。",
-  cheer:"Stay calm!",cheerJ:"落ち着いて いこう！",cond:"g300",tier:4},
- {k:"sawa",n:"澤 穂希",en:"Homare Sawa",fl:"🇯🇵",pos:"MF",co:"日本",
+  cheer:"Work hard every day!",cheerJ:"毎日 こつこつ！",req:["words",200],tier:4},
+ {k:"marta",n:"マルタ",en:"Marta",fl:"🇧🇷",pos:"FW",co:"ブラジル",img:"marta.jpg",
+  fact:"ブラジル女子代表。ワールドカップ通算得点の記録を持ち、世界最優秀選手に何度も選ばれた。",
+  learn:"道がないなら、自分が最初の一人になればいい。",
+  cheer:"Be the first!",cheerJ:"最初の一人に なろう。",req:["goals",500],tier:4},
+ {k:"sawa",n:"澤 穂希",en:"Homare Sawa",fl:"🇯🇵",pos:"MF",co:"日本",img:"sawa.jpg",
   fact:"2011年女子ワールドカップで日本を優勝に導き、得点王とMVPを同時に受賞した。",
   learn:"苦しいときは、上ではなく前を見る。長く続けた人にごほうびが来る。",
-  cheer:"Look forward!",cheerJ:"前を 見よう！",cond:"s14",tier:4},
- {k:"maradona",n:"ディエゴ・マラドーナ",en:"Diego Maradona",fl:"🇦🇷",pos:"MF",co:"アルゼンチン",
+  cheer:"Look forward!",cheerJ:"前を 見よう！",req:["streak",60],tier:4},
+ {k:"bonmati",n:"アイタナ・ボンマティ",en:"Aitana Bonmatí",fl:"🇪🇸",pos:"MF",co:"スペイン",img:"bonmati.jpg",
+  fact:"スペイン女子代表。2023年女子ワールドカップ優勝の中心選手で、世界最優秀選手に選ばれた。",
+  learn:"うまい人は、じつはいちばん基本をくり返している。",
+  cheer:"Master the basics!",cheerJ:"基本を つみ重ねよう。",req:["level",18],tier:4},
+ {k:"iniesta",n:"アンドレス・イニエスタ",en:"Andrés Iniesta",fl:"🇪🇸",pos:"MF",co:"スペイン",img:"iniesta.jpg",
+  fact:"2010年ワールドカップ決勝で決勝ゴールを決め、スペインを初優勝に導いた。のちに日本でもプレーした。",
+  learn:"静かな人でも、いちばん大事な場面で決められる。",
+  cheer:"Your moment will come!",cheerJ:"きみの出番は 必ず来る。",req:["words",250],tier:4},
+ {k:"zidane",n:"ジネディーヌ・ジダン",en:"Zinédine Zidane",fl:"🇫🇷",pos:"MF",co:"フランス",img:"zidane.jpg",
+  fact:"1998年ワールドカップ優勝、同年バロンドール受賞。落ち着いたボールコントロールで知られた。",
+  learn:"あわてないこと。落ち着いている人のところに、ボールも答えも集まる。",
+  cheer:"Stay calm!",cheerJ:"落ち着いて いこう！",req:["goals",700],tier:4},
+ {k:"r9",n:"ロナウド",en:"Ronaldo",fl:"🇧🇷",pos:"FW",co:"ブラジル",img:"r9.jpg",
+  fact:"2002年ワールドカップ優勝、同大会の得点王。大けがから復帰して世界一になった。",
+  learn:"けがや失敗のあとに、いちばん強い自分が来ることがある。",
+  cheer:"Come back stronger!",cheerJ:"もっと強くなって もどろう。",req:["streak",90],tier:4},
+ {k:"maradona",n:"ディエゴ・マラドーナ",en:"Diego Maradona",fl:"🇦🇷",pos:"MF",co:"アルゼンチン",img:"maradona.jpg",
   fact:"1986年ワールドカップ優勝。準々決勝で見せた5人抜きのゴールは歴史に残る。",
   learn:"だれかの真似じゃない、自分だけのプレーをさがそう。",
-  cheer:"Be yourself!",cheerJ:"自分らしく いこう！",cond:"lv15",tier:4},
- {k:"pele",n:"ペレ",en:"Pelé",fl:"🇧🇷",pos:"FW",co:"ブラジル",
+  cheer:"Be yourself!",cheerJ:"自分らしく いこう！",req:["level",22],tier:4},
+ {k:"cruyff",n:"ヨハン・クライフ",en:"Johan Cruyff",fl:"🇳🇱",pos:"FW",co:"オランダ",img:"cruyff.jpg",
+  fact:"1974年ワールドカップ準優勝。全員が攻めて守る「トータルフットボール」の象徴となった。",
+  learn:"うまくなるだけでなく、考え方を変えるとサッカーが変わる。",
+  cheer:"Think differently!",cheerJ:"ちがう見方を してみよう。",req:["words",300],tier:4},
+ {k:"pele",n:"ペレ",en:"Pelé",fl:"🇧🇷",pos:"FW",co:"ブラジル",img:"pele.jpg",
   fact:"ワールドカップを3回（1958・1962・1970年）制した唯一の選手。17歳で初優勝を経験した。",
   learn:"「王様」も最初は17歳の新人だった。はじまりは、いつも小さい。",
-  cheer:"Dream big!",cheerJ:"大きな ゆめを もとう！",cond:"w200",tier:4}
+  cheer:"Dream big!",cheerJ:"大きな ゆめを もとう！",req:["goals",1000],tier:4},
+/* ---- 日本のレジェンド ---- */
+ {k:"tomiyasu",n:"冨安 健洋",en:"Takehiro Tomiyasu",fl:"🇯🇵",pos:"DF",co:"日本",img:"tomiyasu.jpg",
+  fact:"日本代表のディフェンダー。右でも左でも中央でも守れる対応力で評価された。",
+  learn:"いろいろな役ができる人は、どこでも必要とされる。",
+  cheer:"Be ready for anything!",cheerJ:"どんな時でも 用意しておこう。",req:["level",20],tier:4},
+ {k:"honda",n:"本田 圭佑",en:"Keisuke Honda",fl:"🇯🇵",pos:"MF",co:"日本",img:"honda.jpg",
+  fact:"日本代表。2010年・2014年・2018年と3大会のワールドカップでゴールを決めた。",
+  learn:"言いきってから、そこへ自分を近づけていく人もいる。",
+  cheer:"Say it, then do it!",cheerJ:"口に出して、やりきろう。",req:["words",175],tier:4},
+ {k:"nakata",n:"中田 英寿",en:"Hidetoshi Nakata",fl:"🇯🇵",pos:"MF",co:"日本",img:"nakata.jpg",
+  fact:"日本代表。1998年の初ワールドカップ出場世代で、イタリアの強豪でプレーした先駆者。",
+  learn:"最初に外へ出ていく人は不安。でもその一歩が、後の人の道になる。",
+  cheer:"Open the door!",cheerJ:"とびらを 開けよう。",req:["streak",75],tier:4},
+ {k:"beckham",n:"デビッド・ベッカム",en:"David Beckham",fl:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",pos:"MF",co:"イングランド",img:"beckham.jpg",
+  fact:"イングランド代表。精度の高いフリーキックとクロスで知られ、日韓ワールドカップでも活躍した。",
+  learn:"1つの技をみがき切ると、それだけで世界で通用する。",
+  cheer:"Practice one thing!",cheerJ:"ひとつを みがき切ろう。",req:["goals",850],tier:4}
 ];
 
 const RANKS=[[1,"ルーキー","🔰"],[3,"レギュラー","⚽"],[6,"エース","🌟"],[10,"キャプテン","🎖️"],
@@ -1018,11 +1248,46 @@ function tone(f,t0,dur,type,vol){
   g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+t0+dur);
   o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+t0);o.stop(ac.currentTime+t0+dur+.02);
 }
+/* 主審のホイッスル：高音＋細かいトリル（ピーッ・ピーッ・ピーーッ） */
+function refWhistle(){
+  if(!ac||!S.set.sfx)return;
+  const blast=(t0,dur)=>{
+    const o=ac.createOscillator(),g=ac.createGain(),lfo=ac.createOscillator(),lg=ac.createGain();
+    o.type="square";o.frequency.setValueAtTime(3150,ac.currentTime+t0);
+    lfo.type="sine";lfo.frequency.setValueAtTime(42,ac.currentTime+t0);
+    lg.gain.setValueAtTime(260,ac.currentTime+t0);
+    lfo.connect(lg);lg.connect(o.frequency);
+    g.gain.setValueAtTime(0,ac.currentTime+t0);
+    g.gain.linearRampToValueAtTime(.075,ac.currentTime+t0+.015);
+    g.gain.setValueAtTime(.075,ac.currentTime+t0+dur-.05);
+    g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+t0+dur);
+    o.connect(g);g.connect(ac.destination);
+    o.start(ac.currentTime+t0);o.stop(ac.currentTime+t0+dur+.02);
+    lfo.start(ac.currentTime+t0);lfo.stop(ac.currentTime+t0+dur+.02);
+  };
+  blast(0,.16);blast(.22,.16);blast(.44,.42);
+}
+/* スタジアムの歓声：ノイズをバンドパスで包んで盛り上げる */
+function crowd(sec){
+  if(!ac||!S.set.sfx)return;
+  const n=Math.floor(ac.sampleRate*sec);
+  const buf=ac.createBuffer(1,n,ac.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*.6;
+  const src=ac.createBufferSource();src.buffer=buf;
+  const bp=ac.createBiquadFilter();bp.type="bandpass";bp.frequency.value=950;bp.Q.value=.75;
+  const g=ac.createGain();
+  g.gain.setValueAtTime(0,ac.currentTime);
+  g.gain.linearRampToValueAtTime(.16,ac.currentTime+sec*.28);
+  g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+sec);
+  src.connect(bp);bp.connect(g);g.connect(ac.destination);
+  src.start();src.stop(ac.currentTime+sec);
+}
 function sfx(k){
   if(!ac||!S.set.sfx)return;
   if(k==="good"){[523,659,784,1047].forEach((f,i)=>tone(f,i*.07,.22,"triangle",.14))}
   else if(k==="bad"){tone(180,0,.22,"sawtooth",.10);tone(140,.10,.26,"sawtooth",.08)}
-  else if(k==="whistle"){tone(2100,0,.12,"square",.05);tone(2400,.1,.16,"square",.05)}
+  else if(k==="whistle"){refWhistle();crowd(1.1)}
+  else if(k==="pip"){tone(2100,0,.1,"square",.05)}
   else if(k==="tap"){tone(700,0,.06,"sine",.07)}
   else if(k==="level"){[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.09,.3,"triangle",.15))}
 }
@@ -1037,8 +1302,43 @@ function seenCount(){return Object.keys(S.srs).length}
 function weakItems(){return ITEMS.filter(it=>{const r=S.srs[it.w];return r&&r.b<=1&&r.wrong>0})}
 
 /* ========================= SCREENS ========================= */
-const SCREENS=["s-home","s-quiz","s-panel","s-speak","s-cards","s-book","s-stats","s-set"];
-function show(id){SCREENS.forEach(s=>$("#"+s).classList.toggle("hidden",s!==id));window.scrollTo(0,0)}
+const SCREENS=["s-home","s-quiz","s-panel","s-speak","s-cards","s-credits","s-book","s-stats","s-set"];
+const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* 画面が切りかわるたび、ボールが画面を横切る */
+function ballSweep(){
+  if(reduceMotion)return;
+  const b=document.createElement("div");
+  b.id="kickball";b.textContent="⚽";
+  b.style.animation="flyby .72s cubic-bezier(.25,.5,.5,1) forwards";
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),820);
+}
+let lastScreen="";
+function show(id){
+  if(lastScreen&&lastScreen!==id){ballSweep();sfx("pip")}
+  lastScreen=id;
+  SCREENS.forEach(s=>$("#"+s).classList.toggle("hidden",s!==id));
+  window.scrollTo(0,0);
+}
+/* 試合中に選手が顔を出して応援してくれる */
+let cheerTimer=null;
+function playerCheer(force){
+  const owned=PLAYERS.filter(p=>S.cards[p.k]);
+  const pool=owned.length?owned:PLAYERS.slice(0,3);   /* 1枚も無い序盤も出す */
+  const p=force||pool[Math.floor(Math.random()*pool.length)];
+  const old=document.getElementById("cheerin");if(old)old.remove();
+  const el=document.createElement("div");
+  el.id="cheerin";
+  el.innerHTML='<img src="'+photoOf(p)+'" alt="">'+
+    '<div class="tx"><div class="who">'+esc(p.n)+' の おうえん</div>'+
+    '<div class="msg">'+esc(p.cheer)+'</div>'+
+    '<div class="msgj">'+esc(p.cheerJ)+'</div></div>';
+  document.body.appendChild(el);
+  el.onclick=()=>{speak(p.cheer)};
+  speak(p.cheer);
+  clearTimeout(cheerTimer);
+  cheerTimer=setTimeout(()=>{el.remove()},3200);
+}
 
 function renderHome(){
   const li=levelInfo(),rk=rankOf(li.lv);
@@ -1239,6 +1539,10 @@ function judge(ok,xpOverride){
     const gain=(xpOverride!==undefined?xpOverride:10)+Math.min(Q.combo,6)*2;
     Q.xp+=gain;S.xp+=gain;
     if(!Q.mvp||Q.combo>=Q.best)Q.mvp=it;
+    /* 連続ゴールの節目で選手が応援に出てくる */
+    if(Q.combo===3||Q.combo===6||Q.combo===10||Q.combo===15){
+      crowd(1.4);setTimeout(()=>playerCheer(),1650);
+    }
     sfx("good");feedback(true,it,gain);
   } else {
     Q.combo=0;r.wrong++;r.b=0;r.due=today();
@@ -1281,11 +1585,16 @@ function confetti(){
 
 function halftime(){
   sfx("whistle");show("s-panel");
+  const owned=PLAYERS.filter(p=>S.cards[p.k]),pl=(owned.length?owned:PLAYERS.slice(0,3))[
+    Math.floor(Math.random()*(owned.length||3))];
   $("#s-panel").innerHTML='<div class="panel">'+
+    '<div class="coachbox"><img src="'+photoOf(pl)+'" alt=""><div>'+
+      '<span>'+esc(pl.n)+'</span><b>'+esc(pl.cheer)+'</b><i>'+esc(pl.cheerJ)+'</i></div></div>'+
     '<div class="kicker">HALF TIME</div><h2>ハーフタイム</h2>'+
     '<div class="score">'+Q.goals+'</div><div style="font-size:12px;color:var(--muted)">ゴール / '+Q.shots+'シュート</div>'+
     '<div class="stats"><div><span>さいこうれんぞく</span><b>'+Q.best+'</b></div><div><span>かくとくXP</span><b>'+Q.xp+'</b></div></div>'+
     '<div class="btnrow"><button class="btn" id="p-go">後半キックオフ ⚽</button></div></div>';
+  if(ttsUsable())setTimeout(()=>speak(pl.cheer),500);
   $("#p-go").onclick=()=>{show("s-quiz");renderQ()};
 }
 
@@ -1526,23 +1835,37 @@ function endSpeak(){
 
 /* ========================= プレーヤーカード ========================= */
 function cardCount(){return Object.keys(S.cards).length}
+/* 解放条件は [種類, 必要数] の組で持つ。44枚あるので判定も表示も1か所で作る */
+function reqNow(t){
+  if(t==="goals")return S.goals;
+  if(t==="streak")return S.streak;
+  if(t==="words")return masteredCount();
+  if(t==="combo")return S.bestCombo;
+  if(t==="level")return levelInfo().lv;
+  if(t==="spoke")return S.spoke;
+  return 0;
+}
+function reqMet(r){return reqNow(r[0])>=r[1]}
+function condLabel(r){
+  const v=r[1];
+  return {goals:"つうさん"+v+"ゴール",streak:v+"日れんぞく",words:v+"語マスター",
+    combo:v+"れんぞくゴール",level:"Lv."+v,spoke:"はなす練習"+v+"回"}[r[0]]||"？";
+}
 function checkPlayers(){
-  const li=levelInfo(),m=masteredCount(),got=[];
-  const cond={
-    first:S.goals>=1, s3:S.streak>=3, w20:m>=20, combo10:S.bestCombo>=10,
-    g50:S.goals>=50, g100:S.goals>=100, s7:S.streak>=7, lv5:li.lv>=5,
-    w50:m>=50, lv10:li.lv>=10, w100:m>=100, s30:S.streak>=30,
-    g300:S.goals>=300, s14:S.streak>=14, lv15:li.lv>=15, w200:m>=200
-  };
-  PLAYERS.forEach(p=>{if(cond[p.cond]&&!S.cards[p.k]){S.cards[p.k]=today();got.push(p)}});
+  const got=[];
+  PLAYERS.forEach(p=>{if(reqMet(p.req)&&!S.cards[p.k]){S.cards[p.k]=today();got.push(p)}});
   return got;
 }
-function condLabel(k){
-  return {first:"はじめての試合",s3:"3日れんぞく",w20:"20語マスター",combo10:"10れんぞくゴール",
-    g50:"つうさん50ゴール",g100:"つうさん100ゴール",s7:"7日れんぞく",lv5:"Lv.5",
-    w50:"50語マスター",lv10:"Lv.10",w100:"100語マスター",s30:"30日れんぞく",
-    g300:"つうさん300ゴール",s14:"14日れんぞく",lv15:"Lv.15",w200:"200語マスター"}[k]||"？";
+/* あと少しで取れるカード（ホームで見せると続ける動機になる） */
+function nextCard(){
+  const locked=PLAYERS.filter(p=>!S.cards[p.k]);
+  if(!locked.length)return null;
+  locked.sort((a,b)=>(b.req[1]?reqNow(b.req[0])/b.req[1]:0)-(a.req[1]?reqNow(a.req[0])/a.req[1]:0));
+  const p=locked[0];
+  return {p,now:Math.min(reqNow(p.req[0]),p.req[1]),need:p.req[1]};
 }
+function photoOf(p){return "img/"+p.img}
+function creditOf(k){return PHOTO_CREDITS.find(c=>c.k===k)}
 function revealCards(list,idx){
   idx=idx||0;
   if(idx>=list.length){document.getElementById("reveal")&&document.getElementById("reveal").remove();return}
@@ -1562,28 +1885,39 @@ function revealCards(list,idx){
   };
 }
 function bigCardHtml(p,footer){
+  const cr=creditOf(p.k);
   return '<div class="bigcard">'+
-    '<div class="kicker">PLAYER CARD</div>'+
-    '<div class="fl">'+p.fl+'</div>'+
-    '<div class="nm">'+esc(p.n)+'</div>'+
-    '<div class="en">'+esc(p.en)+'</div>'+
-    '<div class="meta"><span>'+esc(p.co)+'</span><span>'+p.pos+'</span></div>'+
+    '<div class="photo"><img src="'+photoOf(p)+'" alt="'+esc(p.en)+'">'+
+      '<span class="tier t'+p.tier+'">★'+p.tier+'</span>'+
+      '<span class="shade"></span>'+
+      '<span class="pname"><b>'+esc(p.n)+'</b><i>'+esc(p.en)+'</i></span></div>'+
+    '<div class="meta"><span>'+p.fl+' '+esc(p.co)+'</span><span>'+p.pos+'</span></div>'+
     '<div class="fact">'+esc(p.fact)+'</div>'+
     '<div class="learn"><i>この選手から 学べること</i>'+esc(p.learn)+'</div>'+
     '<div class="cheer"><div class="en2">'+esc(p.cheer)+'</div>'+
       '<div class="jp">'+esc(p.cheerJ)+'</div>'+
       '<button id="rv-cheer">🔊 声に出して言ってみよう</button></div>'+
+    (cr?'<div class="credit">写真: '+esc(cr.a)+' / '+esc(cr.l)+'</div>':'')+
     (footer||'')+'</div>';
 }
 function renderCards(){
+  const n=cardCount();
+  $("#cd-head").textContent=n+" / "+PLAYERS.length+" まい";
+  const nx=nextCard();
+  $("#cd-next").innerHTML=nx?
+    '<div class="nextcard"><img src="'+photoOf(nx.p)+'" alt="" class="silh">'+
+    '<div><span>つぎに ゲットできる カード</span><b>'+condLabel(nx.p.req)+'</b>'+
+    '<div class="pbar"><i style="width:'+Math.round(nx.now/nx.need*100)+'%"></i></div>'+
+    '<small>'+nx.now+' / '+nx.need+'</small></div></div>':
+    '<div class="nextcard done">🏆 ぜんぶ集めた！ すごい！</div>';
   $("#cd-grid").innerHTML=PLAYERS.map(p=>{
     const got=!!S.cards[p.k];
     return '<button class="pcard '+(got?"got":"locked")+'" data-k="'+p.k+'">'+
       '<span class="tierbar t'+p.tier+'"></span>'+
-      '<span class="fl">'+(got?p.fl:"🔒")+'</span>'+
+      '<span class="pic"><img src="'+photoOf(p)+'" alt="" loading="lazy"'+(got?'':' class="silh"')+'>'+
+      (got?'':'<span class="lock">🔒</span>')+'</span>'+
       '<span class="nm">'+(got?esc(p.n):"？？？")+'</span>'+
-      '<span class="ps">'+(got?esc(p.co)+" ・ "+p.pos:"")+'</span>'+
-      '<span class="lk">'+(got?"":condLabel(p.cond)+"で ゲット")+'</span></button>';
+      '<span class="ps">'+(got?p.fl+" "+esc(p.co)+" ・ "+p.pos:condLabel(p.req))+'</span></button>';
   }).join("");
   [].forEach.call($("#cd-grid").children,b=>b.onclick=()=>{
     const p=PLAYERS.find(x=>x.k===b.dataset.k);
@@ -1595,6 +1929,16 @@ function renderCards(){
     document.getElementById("rv-next").onclick=()=>R.remove();
   });
   show("s-cards");bindHome();
+  $("#b-credits").onclick=renderCredits;
+}
+function renderCredits(){
+  $("#cr-list").innerHTML=PLAYERS.map(p=>{
+    const c=creditOf(p.k);if(!c)return "";
+    return '<a class="crrow" href="'+esc(c.u)+'" target="_blank" rel="noopener noreferrer">'+
+      '<img src="'+photoOf(p)+'" alt="" loading="lazy">'+
+      '<span><b>'+esc(p.en)+'</b><i>'+esc(c.a||"不明")+'</i><em>'+esc(c.l)+'</em></span></a>';
+  }).join("");
+  show("s-credits");bindHome();
 }
 
 /* ========================= BOOK ========================= */
