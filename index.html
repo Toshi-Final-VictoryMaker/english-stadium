@@ -306,6 +306,9 @@ input[type=range]{width:130px;accent-color:var(--accent)}
 .nextcard{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);
   border-radius:16px;padding:12px;margin-bottom:12px}
 .nextcard.done{justify-content:center;font-size:14px;color:var(--gold)}
+.nextcard .mys{position:relative;width:54px;height:54px;flex:none;display:block}
+.nextcard .mys i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;
+  font-family:var(--en);font-size:26px;color:var(--gold);opacity:.9}
 .nextcard img{width:54px;height:54px;border-radius:12px;object-fit:cover;object-position:center 15%;flex:none}
 .nextcard img.silh{filter:brightness(.18) grayscale(1) contrast(1.6)}
 .nextcard span{display:block;font-size:10px;color:var(--muted);letter-spacing:.08em}
@@ -1905,7 +1908,7 @@ function renderCards(){
   $("#cd-head").textContent=n+" / "+PLAYERS.length+" まい";
   const nx=nextCard();
   $("#cd-next").innerHTML=nx?
-    '<div class="nextcard"><img src="'+photoOf(nx.p)+'" alt="" class="silh">'+
+    '<div class="nextcard"><span class="mys"><img src="'+photoOf(nx.p)+'" alt="" class="silh"><i>?</i></span>'+
     '<div><span>つぎに ゲットできる カード</span><b>'+condLabel(nx.p.req)+'</b>'+
     '<div class="pbar"><i style="width:'+Math.round(nx.now/nx.need*100)+'%"></i></div>'+
     '<small>'+nx.now+' / '+nx.need+'</small></div></div>':
